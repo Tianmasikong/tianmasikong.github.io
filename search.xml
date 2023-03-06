@@ -11,4 +11,47 @@
         <tag>日常</tag>
       </tags>
   </entry>
+  <entry>
+    <title>数据库开发03-B树索引的结构和应用</title>
+    <url>/2023/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9103-B%E6%A0%91%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="构建索引带来的问题"><a href="#构建索引带来的问题" class="headerlink" title="构建索引带来的问题"></a>构建索引带来的问题</h2><ul>
+<li>消耗大量物理空间</li>
+<li>进行更新和删除操作时开销增大</li>
+</ul>
+<h2 id="索引降低查询效率的情况"><a href="#索引降低查询效率的情况" class="headerlink" title="索引降低查询效率的情况"></a>索引降低查询效率的情况</h2><ul>
+<li>基本表很小</li>
+<li>满足同一索引的记录过多，通过索引搜索出的记录过多</li>
+</ul>
+<h2 id="胖表和瘦表"><a href="#胖表和瘦表" class="headerlink" title="胖表和瘦表"></a>胖表和瘦表</h2><ul>
+<li>胖表字段数较多，但记录数较少</li>
+<li>瘦表字段数较少，记录数较多</li>
+<li>胖表和瘦表的最大区别是单一记录的字段长短不同，一个物理块中存放数据的数量不同</li>
+</ul>
+<h2 id="什么时候应该使用B树索引"><a href="#什么时候应该使用B树索引" class="headerlink" title="什么时候应该使用B树索引"></a>什么时候应该使用B树索引</h2><ul>
+<li>仅需要通过索引访问基本表的很少一部分行</li>
+<li>如果要处理表中的多行，可以使用索引而不使用表</li>
+</ul>
+<h2 id="索引组织表（IOT）"><a href="#索引组织表（IOT）" class="headerlink" title="索引组织表（IOT）"></a>索引组织表（IOT）</h2><ul>
+<li>基于整个基本表创建的索引</li>
+<li>不更新，但需要通过编码前缀进行快速检索</li>
+<li>代码表（如全国省市表）会做成IOT</li>
+</ul>
+<h2 id="读取索引"><a href="#读取索引" class="headerlink" title="读取索引"></a>读取索引</h2><ul>
+<li>索引只是查询工作的第一步</li>
+<li>读取基本表中的数据才是查询的结束</li>
+<li>同样的索引但不同的物理结构，可能会引起查询效率的千差万别<ul>
+<li>磁盘访问的速率</li>
+<li>物理I&#x2F;O很可能是内存访问</li>
+<li>记录存储</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习，数据库</tag>
+      </tags>
+  </entry>
 </search>
