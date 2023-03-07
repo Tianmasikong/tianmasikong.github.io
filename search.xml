@@ -90,7 +90,16 @@
   <entry>
     <title>软件系统设计-状态与命令模式</title>
     <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li><strong>一个对象的行为取决于一个或多个动态变化的属性</strong>，这样的属性叫做状态，这样的对象叫做<strong>有状态的(stateful)对象</strong>，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。</li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/3e98d2b6c3a15d0c.png"></p>
+<ul>
+<li>行为型模式更关注向外暴露的接口，也就是使用的方法</li>
+<li>虽然和策略模式的类结构相同，但在行为上不同</li>
+<li></li>
+</ul>
+]]></content>
       <categories>
         <category>学习</category>
       </categories>
@@ -149,6 +158,62 @@
       <tags>
         <tag>学习</tag>
         <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法-kmp算法</title>
+    <url>/2023/03/07/%E7%AE%97%E6%B3%95-kmp%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>leetcode题目索引:<a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/">28. 找出字符串中第一个匹配项的下标</a></p>
+<h2 id="什么是KMP"><a href="#什么是KMP" class="headerlink" title="什么是KMP"></a>什么是KMP</h2><p>KMP是由这三位学者发明的：Knuth，Morris和Pratt，所以取了三位学者名字的首字母。所以叫做KMP。KMP算法主要用在字符串匹配上，主要思想是<strong>当出现字符串不匹配时，可以知道一部分之前已经匹配的文本内容，可以利用这些信息避免从头再去做匹配了</strong>。</p>
+<h2 id="什么是前缀表"><a href="#什么是前缀表" class="headerlink" title="什么是前缀表"></a>什么是前缀表</h2><p>以字符串aabaaf为例</p>
+<p>所有不包含第一个字符a的字串即为前缀，有a,ab,aba,abaa,abaaf</p>
+<p>所有不包含最后一个字符f的字串即为后缀，有a,aa,aab,aaba,aabaa</p>
+<p>前缀表就是记录一个字符串其所有字串中最长相同前缀后缀的长度</p>
+<p>如aabaa，就有最长相同长度为2</p>
+<p>aaba，就是1</p>
+<p>那么对于字符串aabaaf而言，其前缀表即为:</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>a</td>
+<td>aa</td>
+<td>aab</td>
+<td>aaba</td>
+<td>aabaa</td>
+<td>aabaaf</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<h2 id="为什么需要前缀表呢"><a href="#为什么需要前缀表呢" class="headerlink" title="为什么需要前缀表呢"></a>为什么需要前缀表呢</h2><p>我们知道KMP算法的核心思想就是当出现不匹配时，重复利用之前匹配过的结果以减少时间复杂度。可以重复利用的部分就是相同的前缀和后缀。</p>
+<p>因此，当出现不匹配的情况时，我们只需要把指针移动到已匹配的字符串中最长前缀长度的后面一位处，再接着进行匹配即可。</p>
+<p>以aabaaf为例，如果在f处出现不匹配的情况，那么只需要把指针移到aa(最长相同前后缀长度，2)的后面一位处，即可。对指针而言，移动的步数即为5(当前index)-2(需要移动到的index)&#x3D;3。</p>
+<p><img src="https://code-thinking.cdn.bcebos.com/gifs/KMP%E7%B2%BE%E8%AE%B21.gif"></p>
+<h2 id="如何构造前缀表？"><a href="#如何构造前缀表？" class="headerlink" title="如何构造前缀表？"></a>如何构造前缀表？</h2><p>显然我们需要对一个字符串的所有字串计算其最长相同前后缀长度，再把它填入到前缀表中。</p>
+<p>构建next数组的过程就是构建前缀表的过程，next数组既是对前缀表中每一项-1后的结果。我们使用next数组一样可以完成KMP算法的计算过程；</p>
+<p>如何构造next数组？</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
 </search>
