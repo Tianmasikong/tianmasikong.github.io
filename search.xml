@@ -55,4 +55,100 @@
         <tag>数据库</tag>
       </tags>
   </entry>
+  <entry>
+    <title>软件系统设计-原型模式</title>
+    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>使用原型模式来复制一个对象本身，从而克隆出多个与原则对象一模一样的对象。</li>
+<li>原型模式通过给出一个原型对象来指明所要创建的对象的类型，然后用复制这个原型对象的办法创建出更多同类型的对象 这就是原型模式的意图所在 。</li>
+<li>符合迪米特法则（最小知识原则），屏蔽了细节。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
+<li>是一种对象创建型模式， 用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。 原型模式允许一个对象再创建另外一个可定制的对象，无须知道任何创建的细节。</li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/77c7864368b51c73.png"></p>
+<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
+<li>优点<ul>
+<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程 ，通过一个已有实例可以提高新实例的创建效率。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要为每一个类配备一个克隆方法 ，而且这个克隆方法需要对类的功能进行通盘考虑，这对全新的类来说不是很难，但对已有的类进行改造时，不一定是件容易的事，必须修改其源代码，违背了“开闭原则”。</li>
+<li>在 <strong>实现深克隆时需要编写较为复杂的代码</strong>。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件系统设计-状态与命令模式</title>
+    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件系统设计-建造者模式</title>
+    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>软件开发中存在大量复杂对象，<strong>他们拥有一系列成员属性，这些成员属性中有些是引用类型的成员对象</strong>。这些复杂对象还存在一些限制条件。</li>
+<li>建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
+<li>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</li>
+<li><strong>一步一步创建一个复杂的对象</strong> ，它允许用户只通过指定复杂对象的类型和内容就可以构建它们，用户不需要知道内部的具体构建细节。</li>
+<li>建造者模式属于<strong>对象创建型模式</strong>，又可以称为<strong>生成器模式</strong></li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img  src="https://s3.bmp.ovh/imgs/2023/03/07/b3e7751293a60cf3.png"  ><span class="image-caption">image-20230307141744317</span></p>
+<ul>
+<li>建造者模式包含如下角色：<ul>
+<li>Builder: 抽象建造者</li>
+<li>ConcreteBuilder: 具体建造者</li>
+<li>Director: 指挥者</li>
+<li>Product: 产品角色</li>
+</ul>
+</li>
+<li>为什么不能把Builder和Director合并呢?<ul>
+<li>单一职责原则</li>
+</ul>
+</li>
+</ul>
+<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
+<li>优点<ul>
+<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象 。</li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。</li>
+<li>可以更加精细地控制产品的创建过程。</li>
+<li>可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制 。</li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="建造者模式与抽象工厂模式的比较"><a href="#建造者模式与抽象工厂模式的比较" class="headerlink" title="建造者模式与抽象工厂模式的比较"></a>建造者模式与抽象工厂模式的比较</h2><ul>
+<li>在抽象工厂模式中， 客户端实例化工厂类，然后调用工厂方法获取所需产品对象 ，而在建造者模式中 客户端可以不直接调用建造者的相关方法，而是通过指挥者类来指导如何生成对象，包括对象的组装过程和建造步骤，它侧重于一步步构造一个复杂对象，返回一个完整的对象。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
 </search>
