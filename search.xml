@@ -12,157 +12,8 @@
       </tags>
   </entry>
   <entry>
-    <title>数据库开发03-B树索引的结构和应用</title>
-    <url>/2023/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9103-B%E6%A0%91%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="构建索引带来的问题"><a href="#构建索引带来的问题" class="headerlink" title="构建索引带来的问题"></a>构建索引带来的问题</h2><ul>
-<li>消耗大量物理空间</li>
-<li>进行更新和删除操作时开销增大</li>
-</ul>
-<h2 id="索引降低查询效率的情况"><a href="#索引降低查询效率的情况" class="headerlink" title="索引降低查询效率的情况"></a>索引降低查询效率的情况</h2><ul>
-<li>基本表很小</li>
-<li>满足同一索引的记录过多，通过索引搜索出的记录过多</li>
-</ul>
-<h2 id="胖表和瘦表"><a href="#胖表和瘦表" class="headerlink" title="胖表和瘦表"></a>胖表和瘦表</h2><ul>
-<li>胖表字段数较多，但记录数较少</li>
-<li>瘦表字段数较少，记录数较多</li>
-<li>胖表和瘦表的最大区别是单一记录的字段长短不同，一个物理块中存放数据的数量不同</li>
-</ul>
-<h2 id="什么时候应该使用B树索引"><a href="#什么时候应该使用B树索引" class="headerlink" title="什么时候应该使用B树索引"></a>什么时候应该使用B树索引</h2><ul>
-<li>仅需要通过索引访问基本表的很少一部分行</li>
-<li>如果要处理表中的多行，可以使用索引而不使用表</li>
-</ul>
-<h2 id="索引组织表（IOT）"><a href="#索引组织表（IOT）" class="headerlink" title="索引组织表（IOT）"></a>索引组织表（IOT）</h2><ul>
-<li>基于整个基本表创建的索引</li>
-<li>不更新，但需要通过编码前缀进行快速检索</li>
-<li>代码表（如全国省市表）会做成IOT</li>
-</ul>
-<h2 id="读取索引"><a href="#读取索引" class="headerlink" title="读取索引"></a>读取索引</h2><ul>
-<li>索引只是查询工作的第一步</li>
-<li>读取基本表中的数据才是查询的结束</li>
-<li>同样的索引但不同的物理结构，可能会引起查询效率的千差万别<ul>
-<li>磁盘访问的速率</li>
-<li>物理I&#x2F;O很可能是内存访问</li>
-<li>记录存储</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件系统设计-原型模式</title>
-    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
-<li>使用原型模式来复制一个对象本身，从而克隆出多个与原则对象一模一样的对象。</li>
-<li>原型模式通过给出一个原型对象来指明所要创建的对象的类型，然后用复制这个原型对象的办法创建出更多同类型的对象 这就是原型模式的意图所在 。</li>
-<li>符合迪米特法则（最小知识原则），屏蔽了细节。</li>
-</ul>
-<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
-<li>是一种对象创建型模式， 用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。 原型模式允许一个对象再创建另外一个可定制的对象，无须知道任何创建的细节。</li>
-</ul>
-<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/77c7864368b51c73.png"></p>
-<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
-<li>优点<ul>
-<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程 ，通过一个已有实例可以提高新实例的创建效率。</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>需要为每一个类配备一个克隆方法 ，而且这个克隆方法需要对类的功能进行通盘考虑，这对全新的类来说不是很难，但对已有的类进行改造时，不一定是件容易的事，必须修改其源代码，违背了“开闭原则”。</li>
-<li>在 <strong>实现深克隆时需要编写较为复杂的代码</strong>。</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件系统设计-状态与命令模式</title>
-    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
-<li><strong>一个对象的行为取决于一个或多个动态变化的属性</strong>，这样的属性叫做状态，这样的对象叫做<strong>有状态的(stateful)对象</strong>，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。</li>
-</ul>
-<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/3e98d2b6c3a15d0c.png"></p>
-<ul>
-<li>行为型模式更关注向外暴露的接口，也就是使用的方法</li>
-<li>虽然和策略模式的类结构相同，但在行为上不同</li>
-<li></li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>软件系统设计-建造者模式</title>
-    <url>/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
-<li>软件开发中存在大量复杂对象，<strong>他们拥有一系列成员属性，这些成员属性中有些是引用类型的成员对象</strong>。这些复杂对象还存在一些限制条件。</li>
-<li>建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。</li>
-</ul>
-<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
-<li>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</li>
-<li><strong>一步一步创建一个复杂的对象</strong> ，它允许用户只通过指定复杂对象的类型和内容就可以构建它们，用户不需要知道内部的具体构建细节。</li>
-<li>建造者模式属于<strong>对象创建型模式</strong>，又可以称为<strong>生成器模式</strong></li>
-</ul>
-<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img  src="https://s3.bmp.ovh/imgs/2023/03/07/b3e7751293a60cf3.png"  ><span class="image-caption">image-20230307141744317</span></p>
-<ul>
-<li>建造者模式包含如下角色：<ul>
-<li>Builder: 抽象建造者</li>
-<li>ConcreteBuilder: 具体建造者</li>
-<li>Director: 指挥者</li>
-<li>Product: 产品角色</li>
-</ul>
-</li>
-<li>为什么不能把Builder和Director合并呢?<ul>
-<li>单一职责原则</li>
-</ul>
-</li>
-</ul>
-<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
-<li>优点<ul>
-<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象 。</li>
-<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。</li>
-<li>可以更加精细地控制产品的创建过程。</li>
-<li>可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象。</li>
-</ul>
-</li>
-<li>缺点<ul>
-<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制 。</li>
-<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大 。</li>
-</ul>
-</li>
-</ul>
-<h2 id="建造者模式与抽象工厂模式的比较"><a href="#建造者模式与抽象工厂模式的比较" class="headerlink" title="建造者模式与抽象工厂模式的比较"></a>建造者模式与抽象工厂模式的比较</h2><ul>
-<li>在抽象工厂模式中， 客户端实例化工厂类，然后调用工厂方法获取所需产品对象 ，而在建造者模式中 客户端可以不直接调用建造者的相关方法，而是通过指挥者类来指导如何生成对象，包括对象的组装过程和建造步骤，它侧重于一步步构造一个复杂对象，返回一个完整的对象。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习</category>
-      </categories>
-      <tags>
-        <tag>学习</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>算法-kmp算法</title>
-    <url>/2023/03/07/%E7%AE%97%E6%B3%95-kmp%E7%AE%97%E6%B3%95/</url>
+    <url>/2023/03/07/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95-kmp%E7%AE%97%E6%B3%95/</url>
     <content><![CDATA[<p>leetcode题目索引:<a href="https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/">28. 找出字符串中第一个匹配项的下标</a></p>
 <h2 id="什么是KMP"><a href="#什么是KMP" class="headerlink" title="什么是KMP"></a>什么是KMP</h2><p>KMP是由这三位学者发明的：Knuth，Morris和Pratt，所以取了三位学者名字的首字母。所以叫做KMP。KMP算法主要用在字符串匹配上，主要思想是<strong>当出现字符串不匹配时，可以知道一部分之前已经匹配的文本内容，可以利用这些信息避免从头再去做匹配了</strong>。</p>
 <h2 id="什么是前缀表"><a href="#什么是前缀表" class="headerlink" title="什么是前缀表"></a>什么是前缀表</h2><p>以字符串aabaaf为例</p>
@@ -214,6 +65,216 @@
       <tags>
         <tag>学习</tag>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件系统设计-原型模式</title>
+    <url>/2023/03/07/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>使用原型模式来复制一个对象本身，从而克隆出多个与原则对象一模一样的对象。</li>
+<li>原型模式通过给出一个原型对象来指明所要创建的对象的类型，然后用复制这个原型对象的办法创建出更多同类型的对象 这就是原型模式的意图所在 。</li>
+<li>符合迪米特法则（最小知识原则），屏蔽了细节。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
+<li>是一种对象创建型模式， 用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。 原型模式允许一个对象再创建另外一个可定制的对象，无须知道任何创建的细节。</li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/77c7864368b51c73.png"></p>
+<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
+<li>优点<ul>
+<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程 ，通过一个已有实例可以提高新实例的创建效率。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>需要为每一个类配备一个克隆方法 ，而且这个克隆方法需要对类的功能进行通盘考虑，这对全新的类来说不是很难，但对已有的类进行改造时，不一定是件容易的事，必须修改其源代码，违背了“开闭原则”。</li>
+<li>在 <strong>实现深克隆时需要编写较为复杂的代码</strong>。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件系统设计-建造者模式</title>
+    <url>/2023/03/07/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>软件开发中存在大量复杂对象，<strong>他们拥有一系列成员属性，这些成员属性中有些是引用类型的成员对象</strong>。这些复杂对象还存在一些限制条件。</li>
+<li>建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。</li>
+</ul>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
+<li>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</li>
+<li><strong>一步一步创建一个复杂的对象</strong> ，它允许用户只通过指定复杂对象的类型和内容就可以构建它们，用户不需要知道内部的具体构建细节。</li>
+<li>建造者模式属于<strong>对象创建型模式</strong>，又可以称为<strong>生成器模式</strong></li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img  src="https://s3.bmp.ovh/imgs/2023/03/07/b3e7751293a60cf3.png"  ><span class="image-caption">image-20230307141744317</span></p>
+<ul>
+<li>建造者模式包含如下角色：<ul>
+<li>Builder: 抽象建造者</li>
+<li>ConcreteBuilder: 具体建造者</li>
+<li>Director: 指挥者</li>
+<li>Product: 产品角色</li>
+</ul>
+</li>
+<li>为什么不能把Builder和Director合并呢?<ul>
+<li>单一职责原则</li>
+</ul>
+</li>
+</ul>
+<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
+<li>优点<ul>
+<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象 。</li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。</li>
+<li>可以更加精细地控制产品的创建过程。</li>
+<li>可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制 。</li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="建造者模式与抽象工厂模式的比较"><a href="#建造者模式与抽象工厂模式的比较" class="headerlink" title="建造者模式与抽象工厂模式的比较"></a>建造者模式与抽象工厂模式的比较</h2><ul>
+<li>在抽象工厂模式中， 客户端实例化工厂类，然后调用工厂方法获取所需产品对象 ，而在建造者模式中 客户端可以不直接调用建造者的相关方法，而是通过指挥者类来指导如何生成对象，包括对象的组装过程和建造步骤，它侧重于一步步构造一个复杂对象，返回一个完整的对象。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>软件系统设计-状态与命令模式</title>
+    <url>/2023/03/07/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li><strong>一个对象的行为取决于一个或多个动态变化的属性</strong>，这样的属性叫做状态，这样的对象叫做<strong>有状态的(stateful)对象</strong>，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。</li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/3e98d2b6c3a15d0c.png"></p>
+<ul>
+<li>行为型模式更关注向外暴露的接口，也就是使用的方法</li>
+<li>虽然和策略模式的类结构相同，但在行为上不同</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库开发03-B树索引的结构和应用</title>
+    <url>/2023/03/06/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9103-B%E6%A0%91%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="构建索引带来的问题"><a href="#构建索引带来的问题" class="headerlink" title="构建索引带来的问题"></a>构建索引带来的问题</h2><ul>
+<li>消耗大量物理空间</li>
+<li>进行更新和删除操作时开销增大</li>
+</ul>
+<h2 id="索引降低查询效率的情况"><a href="#索引降低查询效率的情况" class="headerlink" title="索引降低查询效率的情况"></a>索引降低查询效率的情况</h2><ul>
+<li>基本表很小</li>
+<li>满足同一索引的记录过多，通过索引搜索出的记录过多</li>
+</ul>
+<h2 id="胖表和瘦表"><a href="#胖表和瘦表" class="headerlink" title="胖表和瘦表"></a>胖表和瘦表</h2><ul>
+<li>胖表字段数较多，但记录数较少</li>
+<li>瘦表字段数较少，记录数较多</li>
+<li>胖表和瘦表的最大区别是单一记录的字段长短不同，一个物理块中存放数据的数量不同</li>
+</ul>
+<h2 id="什么时候应该使用B树索引"><a href="#什么时候应该使用B树索引" class="headerlink" title="什么时候应该使用B树索引"></a>什么时候应该使用B树索引</h2><ul>
+<li>仅需要通过索引访问基本表的很少一部分行</li>
+<li>如果要处理表中的多行，可以使用索引而不使用表</li>
+</ul>
+<h2 id="索引组织表（IOT）"><a href="#索引组织表（IOT）" class="headerlink" title="索引组织表（IOT）"></a>索引组织表（IOT）</h2><ul>
+<li>基于整个基本表创建的索引</li>
+<li>不更新，但需要通过编码前缀进行快速检索</li>
+<li>代码表（如全国省市表）会做成IOT</li>
+</ul>
+<h2 id="读取索引"><a href="#读取索引" class="headerlink" title="读取索引"></a>读取索引</h2><ul>
+<li>索引只是查询工作的第一步</li>
+<li>读取基本表中的数据才是查询的结束</li>
+<li>同样的索引但不同的物理结构，可能会引起查询效率的千差万别<ul>
+<li>磁盘访问的速率</li>
+<li>物理I&#x2F;O很可能是内存访问</li>
+<li>记录存储</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库开发04-其他类型的索引</title>
+    <url>/2023/03/08/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95/</url>
+    <content><![CDATA[<h2 id="哈希索引-Hash-Index"><a href="#哈希索引-Hash-Index" class="headerlink" title="哈希索引(Hash Index)"></a>哈希索引(Hash Index)</h2><ul>
+<li>MySQL</li>
+<li>使用Hash函数建立索引</li>
+<li>能支持<ul>
+<li>全键值匹配</li>
+<li>只能进行等于，不等于等匹配</li>
+<li>作全键值匹配时效率远远大于B树索引</li>
+</ul>
+</li>
+<li>不支持<ul>
+<li>范围匹配，模糊匹配</li>
+<li>存在碰撞率的问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="位图索引-Bitmap-Index"><a href="#位图索引-Bitmap-Index" class="headerlink" title="位图索引(Bitmap Index)"></a>位图索引(Bitmap Index)</h2><ul>
+<li>Oracle</li>
+</ul>
+<p><img src="https://s3.bmp.ovh/imgs/2023/03/08/30a6334dc139216a.png"></p>
+<ul>
+<li>压缩程度高，紧凑度高，可能只有一两个Block</li>
+<li>只要产生update等操作，会导致整个block锁住，并行写效率极低</li>
+<li>什么时候用<ul>
+<li>相异基数低</li>
+<li>大量临时查询的聚合</li>
+</ul>
+</li>
+</ul>
+<h2 id="位图联结索引-bitmap-join-index"><a href="#位图联结索引-bitmap-join-index" class="headerlink" title="位图联结索引(bitmap join index)"></a>位图联结索引(bitmap join index)</h2><ul>
+<li><p>允许使用另外某个表的列对一个给定表建立索引。</p>
+</li>
+<li><p>实际上，这就是允许对一个索引结构（而不是表本身）中的数据进行逆规范化。</p>
+</li>
+<li><p>MySQL没有位图索引</p>
+<ul>
+<li>优化替代索引组合</li>
+<li>低选择性添加特殊索引</li>
+</ul>
+</li>
+</ul>
+<h2 id="函数索引-function-based-index"><a href="#函数索引-function-based-index" class="headerlink" title="函数索引(function-based index)"></a>函数索引(function-based index)</h2><ul>
+<li>对F(x)的值构建索引，再通过对索引读取x所指向的记录行</li>
+<li>用在哪？<ul>
+<li>不区分大小写的索引（通过函数把内容全变成大写或小写，减少查询压力）</li>
+<li>true和false值存在巨大差异下的索引（如true过多，可以只把false放到索引中，通过函数把true过滤掉，可以减小index的block大小</li>
+<li>有选择的唯一性</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
 </search>

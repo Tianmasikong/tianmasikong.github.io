@@ -6,13 +6,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>软件系统设计-原型模式 - Tianma&#39;s Blog</title>
+  <title>数据库开发04-其他类型的索引 - Tianma&#39;s Blog</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
-  <meta name="keywords" content=", 学习、设计模式、软件系统设计">
-  <meta name="description" content="模式动机
-使用原型模式来复制一个对象本身，从而克隆出多...">
+  <meta name="keywords" content=", 索引、学习、数据库">
+  <meta name="description" content="哈希索引(Hash Index)
+MySQL
+使用Ha...">
   <meta name="author" content="Tianma">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -151,7 +152,7 @@
       
       
     </div>
-    <div class="center">软件系统设计-原型模式</div>
+    <div class="center">数据库开发04-其他类型的索引</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -191,36 +192,65 @@
       <div class="col-xl-6"><article class="article">
   <div class="wrap">
     <section class="head">
-  <img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/07/2f2b78e7295aa7ca.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">软件系统设计-原型模式</h1>
+    <h1 class="head-title">数据库开发04-其他类型的索引</h1>
     <div class="head-info">
-      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 07, 2023</span>
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 08, 2023</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>416</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>524</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-        <h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
-<li>使用原型模式来复制一个对象本身，从而克隆出多个与原则对象一模一样的对象。</li>
-<li>原型模式通过给出一个原型对象来指明所要创建的对象的类型，然后用复制这个原型对象的办法创建出更多同类型的对象 这就是原型模式的意图所在 。</li>
-<li>符合迪米特法则（最小知识原则），屏蔽了细节。</li>
-</ul>
-<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
-<li>是一种对象创建型模式， 用原型实例指定创建对象的种类，并且通过复制这些原型创建新的对象。 原型模式允许一个对象再创建另外一个可定制的对象，无须知道任何创建的细节。</li>
-</ul>
-<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/07/77c7864368b51c73.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
-<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
-<li>优点<ul>
-<li>当创建新的对象实例较为复杂时，使用原型模式可以简化对象的创建过程 ，通过一个已有实例可以提高新实例的创建效率。</li>
+        <h2 id="哈希索引-Hash-Index"><a href="#哈希索引-Hash-Index" class="headerlink" title="哈希索引(Hash Index)"></a>哈希索引(Hash Index)</h2><ul>
+<li>MySQL</li>
+<li>使用Hash函数建立索引</li>
+<li>能支持<ul>
+<li>全键值匹配</li>
+<li>只能进行等于，不等于等匹配</li>
+<li>作全键值匹配时效率远远大于B树索引</li>
 </ul>
 </li>
-<li>缺点<ul>
-<li>需要为每一个类配备一个克隆方法 ，而且这个克隆方法需要对类的功能进行通盘考虑，这对全新的类来说不是很难，但对已有的类进行改造时，不一定是件容易的事，必须修改其源代码，违背了“开闭原则”。</li>
-<li>在 <strong>实现深克隆时需要编写较为复杂的代码</strong>。</li>
+<li>不支持<ul>
+<li>范围匹配，模糊匹配</li>
+<li>存在碰撞率的问题</li>
+</ul>
+</li>
+</ul>
+<h2 id="位图索引-Bitmap-Index"><a href="#位图索引-Bitmap-Index" class="headerlink" title="位图索引(Bitmap Index)"></a>位图索引(Bitmap Index)</h2><ul>
+<li>Oracle</li>
+</ul>
+<p><img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/08/30a6334dc139216a.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<ul>
+<li>压缩程度高，紧凑度高，可能只有一两个Block</li>
+<li>只要产生update等操作，会导致整个block锁住，并行写效率极低</li>
+<li>什么时候用<ul>
+<li>相异基数低</li>
+<li>大量临时查询的聚合</li>
+</ul>
+</li>
+</ul>
+<h2 id="位图联结索引-bitmap-join-index"><a href="#位图联结索引-bitmap-join-index" class="headerlink" title="位图联结索引(bitmap join index)"></a>位图联结索引(bitmap join index)</h2><ul>
+<li><p>允许使用另外某个表的列对一个给定表建立索引。</p>
+</li>
+<li><p>实际上，这就是允许对一个索引结构（而不是表本身）中的数据进行逆规范化。</p>
+</li>
+<li><p>MySQL没有位图索引</p>
+<ul>
+<li>优化替代索引组合</li>
+<li>低选择性添加特殊索引</li>
+</ul>
+</li>
+</ul>
+<h2 id="函数索引-function-based-index"><a href="#函数索引-function-based-index" class="headerlink" title="函数索引(function-based index)"></a>函数索引(function-based index)</h2><ul>
+<li>对F(x)的值构建索引，再通过对索引读取x所指向的记录行</li>
+<li>用在哪？<ul>
+<li>不区分大小写的索引（通过函数把内容全变成大写或小写，减少查询压力）</li>
+<li>true和false值存在巨大差异下的索引（如true过多，可以只把false放到索引中，通过函数把true过滤掉，可以减小index的block大小</li>
+<li>有选择的唯一性</li>
 </ul>
 </li>
 </ul>
@@ -231,19 +261,19 @@
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>Tianma</li>
-    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/08/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;08&#x2F;%E5%A4%A7%E5%AD%A6&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;08&#x2F;%E5%A4%A7%E5%AD%A6&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
         
         
         
-  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul> 
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul> 
 
         
   <nav class="nav">
-    <a href="/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/"><i class="iconfont iconleft"></i>软件系统设计-状态与命令模式</a>
-    <a href="/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/">软件系统设计-建造者模式<i class="iconfont iconright"></i></a>
+    <a></a>
+    <a href="/2023/03/07/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95-kmp%E7%AE%97%E6%B3%95/">算法-kmp算法<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
@@ -289,7 +319,7 @@
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%8A%A8%E6%9C%BA"><span class="toc-text">模式动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-text">模式定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">模式优缺点</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95-Hash-Index"><span class="toc-text">哈希索引(Hash Index)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%8D%E5%9B%BE%E7%B4%A2%E5%BC%95-Bitmap-Index"><span class="toc-text">位图索引(Bitmap Index)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%8D%E5%9B%BE%E8%81%94%E7%BB%93%E7%B4%A2%E5%BC%95-bitmap-join-index"><span class="toc-text">位图联结索引(bitmap join index)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%B4%A2%E5%BC%95-function-based-index"><span class="toc-text">函数索引(function-based index)</span></a></li></ol>
   </aside>
 
         

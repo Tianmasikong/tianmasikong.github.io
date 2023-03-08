@@ -6,13 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>软件系统设计-状态与命令模式 - Tianma&#39;s Blog</title>
+  <title>软件系统设计-建造者模式 - Tianma&#39;s Blog</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content=", 学习、设计模式、软件系统设计">
-  <meta name="description" content="状态模式模式动机
-一个对象的行为取决于一个或多个动态变...">
+  <meta name="description" content="模式动机
+软件开发中存在大量复杂对象，他们拥有一系列成...">
   <meta name="author" content="Tianma">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -151,7 +151,7 @@
       
       
     </div>
-    <div class="center">软件系统设计-状态与命令模式</div>
+    <div class="center">软件系统设计-建造者模式</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -193,25 +193,56 @@
     <section class="head">
   <img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/07/2f2b78e7295aa7ca.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">软件系统设计-状态与命令模式</h1>
+    <h1 class="head-title">软件系统设计-建造者模式</h1>
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 07, 2023</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>193</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>873</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-        <h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
-<li><strong>一个对象的行为取决于一个或多个动态变化的属性</strong>，这样的属性叫做状态，这样的对象叫做<strong>有状态的(stateful)对象</strong>，这样的对象状态是从事先定义好的一系列值中取出的。当一个这样的对象与外部事件产生互动时，其内部状态就会改变，从而使得系统的行为也随之发生变化。</li>
+        <h2 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h2><ul>
+<li>软件开发中存在大量复杂对象，<strong>他们拥有一系列成员属性，这些成员属性中有些是引用类型的成员对象</strong>。这些复杂对象还存在一些限制条件。</li>
+<li>建造者返还给客户端的是一个已经建造完毕的完整产品对象，而用户无须关心该对象所包含的属性以及它们的组装方式，这就是建造者模式的模式动机。</li>
 </ul>
-<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/07/3e98d2b6c3a15d0c.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
+<h2 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h2><ul>
+<li>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。</li>
+<li><strong>一步一步创建一个复杂的对象</strong> ，它允许用户只通过指定复杂对象的类型和内容就可以构建它们，用户不需要知道内部的具体构建细节。</li>
+<li>建造者模式属于<strong>对象创建型模式</strong>，又可以称为<strong>生成器模式</strong></li>
+</ul>
+<h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img    class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/07/b3e7751293a60cf3.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="   ><span class="image-caption">image-20230307141744317</span></p>
 <ul>
-<li>行为型模式更关注向外暴露的接口，也就是使用的方法</li>
-<li>虽然和策略模式的类结构相同，但在行为上不同</li>
-<li></li>
+<li>建造者模式包含如下角色：<ul>
+<li>Builder: 抽象建造者</li>
+<li>ConcreteBuilder: 具体建造者</li>
+<li>Director: 指挥者</li>
+<li>Product: 产品角色</li>
+</ul>
+</li>
+<li>为什么不能把Builder和Director合并呢?<ul>
+<li>单一职责原则</li>
+</ul>
+</li>
+</ul>
+<h2 id="模式优缺点"><a href="#模式优缺点" class="headerlink" title="模式优缺点"></a>模式优缺点</h2><ul>
+<li>优点<ul>
+<li>客户端不必知道产品内部组成的细节，将产品本身与产品的创建过程解耦，使得相同的创建过程可以创建不同的产品对象 。</li>
+<li>增加新的具体建造者无须修改原有类库的代码，指挥者类针对抽象建造者类编程，系统扩展方便，符合“开闭原则”。</li>
+<li>可以更加精细地控制产品的创建过程。</li>
+<li>可以很方便地替换具体建造者或增加新的具体建造者， 用户使用不同的具体建造者即可得到不同的产品对象。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>建造者模式所创建的产品一般具有较多的共同点，其组成部分相似，如果产品之间的差异性很大，则不适合使用建造者模式，因此其使用范围受到一定的限制 。</li>
+<li>如果产品的内部变化复杂，可能会导致需要定义很多具体建造者类来实现这种变化，导致系统变得很庞大 。</li>
+</ul>
+</li>
+</ul>
+<h2 id="建造者模式与抽象工厂模式的比较"><a href="#建造者模式与抽象工厂模式的比较" class="headerlink" title="建造者模式与抽象工厂模式的比较"></a>建造者模式与抽象工厂模式的比较</h2><ul>
+<li>在抽象工厂模式中， 客户端实例化工厂类，然后调用工厂方法获取所需产品对象 ，而在建造者模式中 客户端可以不直接调用建造者的相关方法，而是通过指挥者类来指导如何生成对象，包括对象的组装过程和建造步骤，它侧重于一步步构造一个复杂对象，返回一个完整的对象。</li>
 </ul>
 
       </section>
@@ -220,7 +251,7 @@
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>Tianma</li>
-    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%8A%B6%E6%80%81%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/07/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E5%A4%A7%E5%AD%A6&#x2F;%E8%BD%AF%E7%BB%9F&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;07&#x2F;%E5%A4%A7%E5%AD%A6&#x2F;%E8%BD%AF%E7%BB%9F&#x2F;%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
@@ -231,8 +262,8 @@
 
         
   <nav class="nav">
-    <a href="/2023/03/07/%E7%AE%97%E6%B3%95-kmp%E7%AE%97%E6%B3%95/"><i class="iconfont iconleft"></i>算法-kmp算法</a>
-    <a href="/2023/03/07/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/">软件系统设计-原型模式<i class="iconfont iconright"></i></a>
+    <a href="/2023/03/07/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"><i class="iconfont iconleft"></i>软件系统设计-原型模式</a>
+    <a href="/2023/03/06/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9103-B%E6%A0%91%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E5%BA%94%E7%94%A8/">数据库开发03-B树索引的结构和应用<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
@@ -278,7 +309,7 @@
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="toc-text">状态模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%8A%A8%E6%9C%BA"><span class="toc-text">模式动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-text">模式结构</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%8A%A8%E6%9C%BA"><span class="toc-text">模式动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-text">模式定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-text">模式结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">模式优缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-text">建造者模式与抽象工厂模式的比较</span></a></li></ol>
   </aside>
 
         
