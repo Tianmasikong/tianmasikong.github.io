@@ -442,4 +442,77 @@
         <tag>集合</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Java-集合源码阅读-Set篇</title>
+    <url>/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Set%E7%AF%87/</url>
+    <content><![CDATA[<p><img src="https://s3.bmp.ovh/imgs/2023/03/09/02507300fff3dde9.png"></p>
+<h2 id="HashSet类（非线程安全）"><a href="#HashSet类（非线程安全）" class="headerlink" title="HashSet类（非线程安全）"></a>HashSet类（非线程安全）</h2><p>实现了Set接口</p>
+<h3 id="类描述"><a href="#类描述" class="headerlink" title="类描述"></a>类描述</h3><p>​	此类实现Set接口，由哈希表（实际上是一个HashMap实例）支持。他<strong>不保证集合的迭代顺序</strong>。此类允许空元素。假设散列函数将元素适当地分散在桶中，基本操作（添加、删除、包含和大小）有<strong>恒定的时间性能</strong>。</p>
+<p>​	迭代这个集合需要的时间与 HashSet 实例的大小（元素的数量）加上支持 HashMap 实例的“容量”（桶的数量）的总和成正比。因此，如果迭代性能很重要，则不要将<strong>初始容量</strong>设置得太高（或负载因子太低）。</p>
+<p>​	请注意，此实现<strong>不是同步的</strong>。 如果多个线程同时访问一个散列集，并且至少有一个线程修改了该集，则它必须在外部进行同步。使用 <code>Collections.synchronizedSet</code> 方法“包装”该集合。</p>
+<h3 id="类结构"><a href="#类结构" class="headerlink" title="类结构"></a>类结构</h3><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//HashSet的底层实现</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">transient</span> HashMap&lt;E,Object&gt; map;<br><br><span class="hljs-comment">//无参构造器</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">HashSet</span><span class="hljs-params">()</span> &#123;<br>        map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;();<br>    &#125;<br><br><span class="hljs-comment">//含参构造器，建立的Map大小为Max(c.size/0.75,16)。</span><br><span class="hljs-comment">//也就是说最小含参构造的的HashSet大小为16</span><br><span class="hljs-keyword">public</span> <span class="hljs-title function_">HashSet</span><span class="hljs-params">(Collection&lt;? extends E&gt; c)</span> &#123;<br>        map = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;(Math.max((<span class="hljs-type">int</span> (c.size()/<span class="hljs-number">.75f</span>) + <span class="hljs-number">1</span>, <span class="hljs-number">16</span>));<br>        addAll(c);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>事实上，Set中的每个元素是存储在Map的key中，而map的value存储的则是一个Object对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// Dummy value to associate with an Object in the backing Map</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">Object</span> <span class="hljs-variable">PRESENT</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Object</span>();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="LinkedHashSet类（非线程安全）"><a href="#LinkedHashSet类（非线程安全）" class="headerlink" title="LinkedHashSet类（非线程安全）"></a>LinkedHashSet类（非线程安全）</h2><p>实现了Set接口，继承HashSet类</p>
+<h3 id="类描述-1"><a href="#类描述-1" class="headerlink" title="类描述"></a>类描述</h3><p>​	Set 接口的哈希表和链表实现，具有<strong>可预测的迭代顺序</strong>。此实现与 HashSet 的不同之处在于它<strong>维护一个贯穿其所有条目的双向链表</strong>。 该链表定义了<strong>迭代顺序</strong>，即<strong>元素插入集合的顺序</strong>（插入顺序）。</p>
+<p>​	此类提供所有可选的 Set 操作，并允许空元素。 与 HashSet 一样，它为基本操作（添加、包含和删除）提供<strong>恒定时间性能</strong>，假设散列函数将元素适当地分散在桶中。 由于维护链接列表的额外费用，<strong>性能可能略低于 HashSet</strong>，但有一个例外：迭代 LinkedHashSet 需要的时间与<strong>集合的大小</strong>成正比，而不管其容量如何。 对 HashSet 的迭代可能更昂贵，需要的时间与其<strong>容量</strong>成正比。</p>
+<p>​	此实现<strong>不是同步</strong>的。使用 <code>Collections.synchronizedSet</code> 方法“包装”该集合。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>与HashSet的区别在于<ul>
+<li>HashSet基于HashMap实现，LinkedHashSet基于哈希表和链表实现。</li>
+<li>HashSet迭代顺序不可预测，LinkedHashSet可以保证集合内顺序即为插入顺序。</li>
+<li>HashSet的基本操作效率略高于LinkedHashSet。</li>
+<li>HashSet的迭代时间与集合容量成正比，LinkedHashSet与集合的大小成正比。</li>
+</ul>
+</li>
+</ul>
+<h2 id="TreeSet类（非线程安全）"><a href="#TreeSet类（非线程安全）" class="headerlink" title="TreeSet类（非线程安全）"></a>TreeSet类（非线程安全）</h2><p>实现NavigableSet接口，继承AbstractSet类</p>
+<h3 id="类描述-2"><a href="#类描述-2" class="headerlink" title="类描述"></a>类描述</h3><p>​	底层实现为NavigableMap，近似于SortedMap集合。元素使用它们的<strong>自然顺序</strong>进行排序，或者由在集合创建时提供的 <strong>Comparator</strong> 进行排序，具体取决于使用的构造函数。</p>
+<p>​	此实现为基本操作（添加、删除和包含）提供有保证的 log(n) 时间成本。</p>
+<p>​	此实现<strong>不是同步的</strong>。</p>
+<p>​	此类的迭代器方法返回的迭代器是<strong>快速失败</strong>的。面对并发修改，迭代器会抛出异常，而不是冒着在未来不确定的时间出现任意的、不确定的行为的风险。</p>
+<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>与HashSet的区别在于<ul>
+<li>HashSet基于HashMap实现，LinkedHashSet基于NavigableMap实现。</li>
+<li>HashSet内的元素无序，LinkedHashSet元素使用它们的<strong>自然顺序</strong>或者Comparator进行排序</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结-3"><a href="#总结-3" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Hashset<ul>
+<li>基于HashMap实现</li>
+<li>非线程安全</li>
+<li>基本操作（添加删除等）性能恒定</li>
+<li>迭代时间与集合容量成正比</li>
+</ul>
+</li>
+<li>LinkedHashSet<ul>
+<li>基于哈希表和双向链表实现</li>
+<li>非线程安全</li>
+<li>基本操作（添加删除等）性能恒定，略低于HashSet</li>
+<li>可以保证迭代顺序可预测，即为元素插入顺序</li>
+<li>迭代时间与集合大小成正比</li>
+</ul>
+</li>
+<li>TreeSet<ul>
+<li>基于红黑树实现</li>
+<li>非线程安全</li>
+<li>基本操作（添加删除等）均为O(logn)</li>
+<li>可以保证集合内元素有序</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Java</tag>
+        <tag>集合</tag>
+      </tags>
+  </entry>
 </search>
