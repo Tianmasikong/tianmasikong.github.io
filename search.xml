@@ -565,4 +565,24 @@
         <tag>集合</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Java-集合源码阅读-Queue篇</title>
+    <url>/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Queue%E7%AF%87/</url>
+    <content><![CDATA[<h2 id="PriorityQueue（线程不安全）"><a href="#PriorityQueue（线程不安全）" class="headerlink" title="PriorityQueue（线程不安全）"></a>PriorityQueue（线程不安全）</h2><h3 id="类描述"><a href="#类描述" class="headerlink" title="类描述"></a>类描述</h3><p>​	基于优先级堆的无界优先级队列。底层实现为<strong>Object数组</strong>，通过设定Comparator来规定队列内的排序规则。</p>
+<p>​	此实现为入队和出队方法（offer、poll、remove() 和 add）提供了 <strong>O(log(n)) 时间</strong>； remove(Object) 和 contains(Object) 方法的<strong>线性时间</strong>； 检索方法（peek、element 和 size）的<strong>固定时间</strong>。</p>
+<p>​	<strong>线程不安全</strong>。</p>
+<h2 id="ArrayDeque（非线程安全）"><a href="#ArrayDeque（非线程安全）" class="headerlink" title="ArrayDeque（非线程安全）"></a>ArrayDeque（非线程安全）</h2><h3 id="类描述-1"><a href="#类描述-1" class="headerlink" title="类描述"></a>类描述</h3><p>​	Deque 接口的可调整大小数组实现。数组双端队列没有容量限制； 它们会根据需要增长以支持使用。 它们<strong>不是线程安全</strong>的。</p>
+<p>​	禁止空元素。 此类用作堆栈时可能比 Stack 快，用作队列时比 LinkedList 快。</p>
+<p>​	大多数 ArrayDeque 操作以分摊的<strong>常数时间</strong>运行。</p>
+<p>​	底层为Object数组</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Java</tag>
+        <tag>集合</tag>
+      </tags>
+  </entry>
 </search>
