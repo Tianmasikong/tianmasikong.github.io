@@ -627,4 +627,57 @@
         <tag>集合</tag>
       </tags>
   </entry>
+  <entry>
+    <title>算法-排序算法</title>
+    <url>/2023/03/11/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>leetcode题目索引:<a href="https://leetcode.cn/problems/kth-largest-element-in-an-array/">215. 数组中的第K个最大元素</a></p>
+<p><strong><u><em>事实上我的算法基础是真的差…如果大一的时候好好学数据结构该多好</em></u></strong></p>
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>​	腾讯经常会问到的排序算法，典型场景就是几百万的数据量，要求获取一个第k大的数据</p>
+<p>​	堆作为一个完全二叉树，拥有二叉树的特殊性质</p>
+<p>​	</p>
+<table>
+<thead>
+<tr>
+<th align="center">节点下标</th>
+<th align="center">父亲节点</th>
+<th align="center">左子节点</th>
+<th align="center">右子节点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">i</td>
+<td align="center">(i-1)&#x2F;2</td>
+<td align="center">2*i+1</td>
+<td align="center">2*i+2</td>
+</tr>
+</tbody></table>
+<p>​	我们知道对于一个数组而言，知道一个数的下标就很容易计算出他的父亲和儿子节点的下标，因此在数组上建立堆的操作会较为简便。</p>
+<p>​	以最大堆为例，最大堆要求他的任意一个节点的大小大于其所有儿子节点。那么建立最大堆的操作就是一个递归的操作。</p>
+<p>​	递归的操作内容为：比较当前节点和所有儿子节点，选择一个最大的节点（比如为left），然后将当前节点与left节点交换，再递归处理交换后的left节点。如果当前节点是最大的，就不进行操作。</p>
+<p>​	这里需要理解为什么要递归操作交换后的节点，因为我们不能保证交换后的节点是其子树中的最大节点，因此需要对该节点再次进行一次操作。</p>
+<p>​	那么递归的退出条件是什么？当处理节点下标&gt;&#x3D;数组长度时，就要返回了。<br>​	由于这个操作很像把最上面的节点下沉到下面，因此我们把这个操作叫做<strong>下沉</strong></p>
+<p>​	那么将任务拆分，只需要对完全二叉树中的每个父亲节点都进行一次递归的<strong>下沉</strong>操作，就能够获得一个最大堆了。</p>
+<p>​	那么最后一个父亲节点的序号是多少？我们知道最后一个节点的下标为nums.length-1，那么他的父亲节点作为最后一个父亲节点，他的下标就为(nums.length-1-1)&#x2F;2，从这个下标开始一直到0的都为父亲节点，对这些节点进行下沉操作就行了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">heapify</span><span class="hljs-params">(<span class="hljs-type">int</span>[] num,<span class="hljs-type">int</span> root,<span class="hljs-type">int</span> size)</span>&#123;<br>    <span class="hljs-keyword">if</span>(root &gt;= size)<span class="hljs-keyword">return</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">l</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>*root + <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span>*right + <span class="hljs-number">2</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">max</span> <span class="hljs-operator">=</span> root;<br>    <span class="hljs-keyword">if</span>(l &lt; size)&#123;<br>        <span class="hljs-keyword">if</span>(num[l]&gt;num[max])max = l;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(r &lt; size)&#123;<br>        <span class="hljs-keyword">if</span>(num[r]&gt;num[max])max = r;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(max != root)&#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> num[max];<br>        num[max] = num[root];<br>        num[root] = tmp;<br>        heapify(num,max,size);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">buildMaxHeap</span><span class="hljs-params">(<span class="hljs-type">int</span>[] num)</span>&#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> num.length;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> (size-<span class="hljs-number">1</span>-<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>;i&gt;=<span class="hljs-number">0</span>;i--)<br>    	heapify(num,i,size);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​	再讲讲力扣上的这道题怎么用堆排序解，建立完最大堆后，每次把堆顶和最后一个元素交换，把数组大小-1，再对堆顶进行一次下沉操作。进行k-1次操作后的堆顶就是第k大的数值。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span> <span class="hljs-variable">size</span> <span class="hljs-operator">=</span> nums.length;<br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span> ;i &lt; k-<span class="hljs-number">1</span> ;i ++)&#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> nums[<span class="hljs-number">0</span>];<br>    nums[<span class="hljs-number">0</span>] = nums[--size];<br>    nums[size] = tmp;<br>    heapify(nums,<span class="hljs-number">0</span>,size);<br>&#125;<br><span class="hljs-keyword">return</span> nums[<span class="hljs-number">0</span>];<br></code></pre></td></tr></table></figure>
+
+<h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><p>快速排序就是分治和递归的思想，本质上也不难，可是我大学三年都不一定能写出来，mmd</p>
+<p>先上代码</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">fastSortInternal</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums,<span class="hljs-type">int</span> left,<span class="hljs-type">int</span> right)</span>&#123;<br>    <span class="hljs-keyword">if</span>(left &gt;= right)<span class="hljs-keyword">return</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">l</span> <span class="hljs-operator">=</span> left;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> right;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">pivot</span> <span class="hljs-operator">=</span> left;<br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>        <span class="hljs-keyword">while</span> (left&lt;right&amp;&amp;nums[right]&lt;=nums[pivot])right--;<br>        <span class="hljs-keyword">while</span> (left&lt;right&amp;&amp;nums[left]&gt;=nums[pivot])left++;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> nums[left];<br>        nums[left] = nums[right];<br>        nums[right] = tmp;<br>    &#125;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">tmp</span> <span class="hljs-operator">=</span> nums[left];<br>    nums[left] = nums[pivot];<br>    nums[pivot] = tmp;<br>    fastSortInternal(nums,l,left-<span class="hljs-number">1</span>);<br>    fastSortInternal(nums,left+<span class="hljs-number">1</span>,r);<br>&#125;<br><br> <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">fastSort</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums,<span class="hljs-type">int</span> k)</span>&#123;<br>    fastSortInternal(nums,<span class="hljs-number">0</span>,nums.length-<span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">return</span> nums[k-<span class="hljs-number">1</span>];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​	对于每一次排序，选最左边的一个数为标准值，然后使用left和right双指针，left从左往右遍历直到指向一个比标准值小的数，right从右往左遍历直到指向一个比标准值大的数。然后把这两个指针指向的数交换。重复以上操作指导left与right相遇。把标准值和left与right相遇的index一交换，一次排序就算结束了。</p>
+<p>​	那么分治呢？别急，我们把left与right相遇的index称为index，index左边的数都比标准值大，右边的都比标准值小，那么只需要递归地分别对左边和右边进行排序就行了。</p>
+<p>​	递归的结束？当left&gt;&#x3D;right就结束了。</p>
+<p>​	快排的思想还是很简单的。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
 </search>
