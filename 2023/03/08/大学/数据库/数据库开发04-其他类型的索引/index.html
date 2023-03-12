@@ -280,6 +280,8 @@ MySQL
       
         <section class="comments">
   
+    <div class="btn" id="comments-btn">查看评论</div>
+  
   
 <div id="valine"></div>
 <script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
@@ -296,7 +298,7 @@ MySQL
         lang: "zh-CN",
       });
     }
-    if ( false ) {
+    if ( true ) {
       $("#comments-btn").on("click", function () {
         $(this).hide();
         loadValine();

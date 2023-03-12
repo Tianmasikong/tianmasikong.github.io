@@ -261,6 +261,8 @@ HashMap类（非线程安全）实现Map接口
       
         <section class="comments">
   
+    <div class="btn" id="comments-btn">查看评论</div>
+  
   
 <div id="valine"></div>
 <script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
@@ -277,7 +279,7 @@ HashMap类（非线程安全）实现Map接口
         lang: "zh-CN",
       });
     }
-    if ( false ) {
+    if ( true ) {
       $("#comments-btn").on("click", function () {
         $(this).hide();
         loadValine();

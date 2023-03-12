@@ -311,6 +311,8 @@ redo log（重做日志）​	Inno...">
       
         <section class="comments">
   
+    <div class="btn" id="comments-btn">查看评论</div>
+  
   
 <div id="valine"></div>
 <script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
@@ -327,7 +329,7 @@ redo log（重做日志）​	Inno...">
         lang: "zh-CN",
       });
     }
-    if ( false ) {
+    if ( true ) {
       $("#comments-btn").on("click", function () {
         $(this).hide();
         loadValine();
