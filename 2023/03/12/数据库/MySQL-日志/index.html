@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>学习 - Tianma&#39;s Blog</title>
+  <title>MySQL-日志 - Tianma&#39;s Blog</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
-  
-  
+  <meta name="keywords" content=", 学习、MySQL">
+  <meta name="description" content="redo log（重做日志）​	InnoDB 独有的用...">
   <meta name="author" content="Tianma">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -150,7 +150,7 @@
       
       
     </div>
-    <div class="center">标签</div>
+    <div class="center">MySQL-日志</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -184,77 +184,107 @@
   </div>
 </nav>
   <main id="main">
-  <section class="archive">
-    <div class="archive-container">
-      <div class="archive-post">
-        <h2 class="archive-total"># 学习</h2>
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/12/fde03639709d9222.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">MySQL-日志</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 12, 2023</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>541</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h2 id="redo-log（重做日志）"><a href="#redo-log（重做日志）" class="headerlink" title="redo log（重做日志）"></a>redo log（重做日志）</h2><p>​	InnoDB 独有的用，来记录innodb存储引擎的事务日志，不管事务是否提交都会记录下来，用于数据恢复，使得MySQL拥有了崩溃恢复的能力。</p>
+<p>​	MySQL挂了或宕机了，InnoDB会使用redo log恢复数据，保证数据的持久性与完整性。</p>
+<p>​	当在MySQL中查询数据时，数据库会从硬盘把一页的数据加载出来，叫做数据页，然后放到Buffer Pool中。后续的查询操作都是从这个Pool中找，没有命中再去硬盘加载，减少硬盘IO开销。</p>
+<p>​	更新操作也是对这个Pool进行修改，数据库会把对数据页的修改记录到<strong>重做日志缓存(redo log buffer)<strong>中，接着把这些缓存</strong>刷盘</strong>到redo log文件中。</p>
+<p>​	理想情况，事务一提交就会进行刷盘操作，但实际上，刷盘的时机是根据策略来进行的。</p>
+<h3 id="刷盘"><a href="#刷盘" class="headerlink" title="刷盘"></a>刷盘</h3><p>​	对于刷盘操作，InnoDB设置了一个参数叫做<code>innodb_flush_log_at_trx_commit</code>，用于设定刷盘的策略，对于这个参数，有以下几种赋值情况:</p>
+<ul>
+<li>0:每次事务提交<strong>都不进行</strong>刷盘操作</li>
+<li>1:每次事务提交<strong>都将进行</strong>刷盘操作(default)</li>
+<li>2:每次事务提交都只把redo log buffer<strong>写入文件系统缓存(page cache)中</strong></li>
+</ul>
+<p>​	</p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Tianma</li>
+    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E6%97%A5%E5%BF%97/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;12&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;MySQL-%E6%97%A5%E5%BF%97&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;12&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;MySQL-%E6%97%A5%E5%BF%97&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
         
         
-          
-            <h3 class="archive-year">2023 年</h3>
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E6%97%A5%E5%BF%97/">03/12</a>
-            <a class="archive-title" href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E6%97%A5%E5%BF%97/">MySQL-日志</a>
-          </div>
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E7%B4%A2%E5%BC%95/">MySQL-索引<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+  
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "fkPePQUNWiO6xtRKi0gdbZjd-gzGzoHsz",
+        app_key: "9sFPEJhzPljkPR7psR9ryP5s",
+        placeholder: "雁过留痕",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( false ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
         
           
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E7%B4%A2%E5%BC%95/">03/12</a>
-            <a class="archive-title" href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E7%B4%A2%E5%BC%95/">MySQL-索引</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/11/Java/java-%E5%B9%B6%E5%8F%91/">03/11</a>
-            <a class="archive-title" href="/2023/03/11/Java/java-%E5%B9%B6%E5%8F%91/">java-并发</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/11/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">03/11</a>
-            <a class="archive-title" href="/2023/03/11/%E7%AE%97%E6%B3%95/%E7%AE%97%E6%B3%95-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">算法-排序算法</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Map%E7%AF%87/">03/10</a>
-            <a class="archive-title" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Map%E7%AF%87/">Java-集合源码阅读-Map篇</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Queue%E7%AF%87/">03/10</a>
-            <a class="archive-title" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Queue%E7%AF%87/">Java-集合源码阅读-Queue篇</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-List%E7%AF%87/">03/10</a>
-            <a class="archive-title" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-List%E7%AF%87/">Java-集合源码阅读-List篇</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Set%E7%AF%87/">03/10</a>
-            <a class="archive-title" href="/2023/03/10/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-Set%E7%AF%87/">Java-集合源码阅读-Set篇</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/09/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-%E6%8E%A5%E5%8F%A3%E7%AF%87/">03/09</a>
-            <a class="archive-title" href="/2023/03/09/Java/Java-%E9%9B%86%E5%90%88%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-%E6%8E%A5%E5%8F%A3%E7%AF%87/">Java-集合源码阅读-接口篇</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/03/08/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95/">03/08</a>
-            <a class="archive-title" href="/2023/03/08/%E5%A4%A7%E5%AD%A6/%E6%95%B0%E6%8D%AE%E5%BA%93/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%BC%80%E5%8F%9104-%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%B4%A2%E5%BC%95/">数据库开发04-其他类型的索引</a>
-          </div>
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#redo-log%EF%BC%88%E9%87%8D%E5%81%9A%E6%97%A5%E5%BF%97%EF%BC%89"><span class="toc-text">redo log（重做日志）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B7%E7%9B%98"><span class="toc-text">刷盘</span></a></li></ol></li></ol>
+  </aside>
+
         
       </div>
     </div>
-  </section>
+  </div>
 </main>
   
 
