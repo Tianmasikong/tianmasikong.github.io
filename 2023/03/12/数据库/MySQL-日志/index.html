@@ -205,7 +205,7 @@ redo log（重做日志）​	Inno...">
       <section class="content">
         
         <p><u><em><strong>很抽象的一章</strong></em></u></p>
-<h2 id="redo-log（重做日志）"><a href="#redo-log（重做日志）" class="headerlink" title="redo log（重做日志）"></a>redo log（重做日志）</h2><p>​	InnoDB 独有的用，来记录innodb存储引擎的事务日志，不管事务是否提交都会记录下来，用于数据恢复，使得MySQL拥有了崩溃恢复的能力。</p>
+<h2 id="redo-log（重做日志）"><a href="#redo-log（重做日志）" class="headerlink" title="redo log（重做日志）"></a>redo log（重做日志）</h2><p>​	InnoDB 独有的，用来记录innodb存储引擎的事务日志，不管事务是否提交都会记录下来，用于数据恢复，使得MySQL拥有了崩溃恢复的能力。</p>
 <p>​	MySQL挂了或宕机了，InnoDB会使用redo log恢复数据，保证数据的持久性与完整性。</p>
 <p>​	当在MySQL中查询数据时，数据库会从硬盘把一页的数据加载出来，叫做数据页，然后放到Buffer Pool中。后续的查询操作都是从这个Pool中找，没有命中再去硬盘加载，减少硬盘IO开销。</p>
 <p>​	更新操作也是对这个Pool进行修改，数据库会把对数据页的修改记录到<strong>重做日志缓存(redo log buffer)<strong>中，接着把这些缓存</strong>刷盘</strong>到redo log文件中。</p>
@@ -303,7 +303,7 @@ redo log（重做日志）​	Inno...">
 
         
   <nav class="nav">
-    <a></a>
+    <a href="/2023/03/13/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E4%BA%8B%E5%8A%A1/"><i class="iconfont iconleft"></i>MySQL-事务</a>
     <a href="/2023/03/12/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-%E7%B4%A2%E5%BC%95/">MySQL-索引<i class="iconfont iconright"></i></a>
   </nav>
 
