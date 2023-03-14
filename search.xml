@@ -173,9 +173,9 @@
 </ul>
 <h2 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/07/3e98d2b6c3a15d0c.png"></p>
 <ul>
-<li>行为型模式更关注向外暴露的接口，也就是使用的方法</li>
+<li><strong>行为型模式</strong>更关注向外暴露的接口，也就是使用的方法</li>
 <li>虽然和策略模式的类结构相同，但在行为上不同</li>
-<li></li>
+<li>状态模式的关键是<strong>引入了一个抽象类来专门表示对象的状态</strong>，这个类我们叫做<strong>抽象状态类</strong>，而对象的每一种具体状态类都继承了该类，并<strong>在不同具体状态类中实现了不同状态的行为，包括各种状态之间的转换。</strong></li>
 </ul>
 ]]></content>
       <categories>
@@ -1029,6 +1029,95 @@
         <tag>学习</tag>
         <tag>MySQL</tag>
         <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring和MyBatis</title>
+    <url>/2023/03/14/Java/Java-Spring%E5%92%8CMyBatis/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Redis知识点及考点整理</title>
+    <url>/2023/03/14/%E6%95%B0%E6%8D%AE%E5%BA%93/Redis%E7%9F%A5%E8%AF%86%E7%82%B9%E5%8F%8A%E8%80%83%E7%82%B9%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<p><u><em><strong>妈的，就会这些，其他的看也不看</strong></em></u></p>
+<h2 id="Redis是什么"><a href="#Redis是什么" class="headerlink" title="Redis是什么"></a>Redis是什么</h2><p>​	是一个使用C语言编写的，高性能非关系型的<strong>键值对数据库</strong>。由于数据<strong>存储在内存</strong>中，Redis的<strong>读写速度非常快</strong>，被广泛应用于<strong>缓存方向</strong>。Redis存储的是<strong>KV键值对</strong>，同时<strong>可以将数据写入磁盘</strong>中，保证了<strong>数据的安全</strong>不丢失。</p>
+<h2 id="Redis的优缺点"><a href="#Redis的优缺点" class="headerlink" title="Redis的优缺点"></a>Redis的优缺点</h2><p><strong>优点：</strong></p>
+<ul>
+<li><strong>基于内存操作</strong>，读写速度快。</li>
+<li><strong>支持多种数据类型</strong>，包括String，List等</li>
+<li>支持持久化。支持<strong>RDB</strong>和<strong>AOF</strong>两种持久化机制，可以有效地避免数据丢失问题。</li>
+<li>支持<strong>事务</strong>。但事务不常使用。</li>
+<li>支持<strong>主从复制</strong>。</li>
+<li>命令的处理是<strong>单线程</strong>的。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>对结构化查询的支持较差</li>
+<li>容量受到物理内存的限制</li>
+<li>较难支持在线扩容</li>
+</ul>
+<h2 id="Redis为什么这么快"><a href="#Redis为什么这么快" class="headerlink" title="Redis为什么这么快"></a>Redis为什么这么快</h2><ul>
+<li><strong>基于内存操作</strong>：内存的读写速度是硬盘的上千倍</li>
+<li><strong>I&#x2F;O多路复用模型</strong>：采用IO多路复用技术，监听多个Socket并利用单线程事务轮询</li>
+<li><strong>高效的数据结构</strong>：对每种数据结构都做了底层优化</li>
+</ul>
+<h2 id="Redis的线程模型"><a href="#Redis的线程模型" class="headerlink" title="Redis的线程模型"></a>Redis的线程模型</h2><p>​	Redis基于Reactor模式开发了网络事件处理器，又被称为文件事件处理器。它由四个部分组成：<strong>多个套接字，IO多路复用程序，文件事件分派器，事件处理器</strong>。<u>因为文件事件分派器的数据消费是单线程的，所以Redis才叫单线程模型。</u></p>
+<ul>
+<li>文件事件处理器使用IO多路复用程序来同时监听多个套接字，并根据套接字目前执行的任务来为套接字关联不同的事件处理器。</li>
+<li>当被监听的套接字准备好执行accpet，read等操作d时，与操作相对应的文件事件就会产生，这时文件事件处理器就会调用套接字之前关联好的事件处理器来处理这些事件。</li>
+</ul>
+<p>​	虽然文件事件处理器以单线程方式运行，但通过使用IO多路复用程序来监听多个套接字，文件事件处理器既实现了高性能的网络通信模型，又很好地与Redis中其他单线程方式运行的模块相对接，保持了内部设计的简单性。</p>
+<h2 id="使用Redis的场景有那些"><a href="#使用Redis的场景有那些" class="headerlink" title="使用Redis的场景有那些"></a>使用Redis的场景有那些</h2><ol>
+<li><strong>缓存热点数据</strong>，减缓数据库的压力</li>
+<li><strong>实现计数器功能</strong>如用户点赞数、用户访问数等</li>
+<li>简单的<strong>消息队列</strong></li>
+<li><strong>限速器</strong>，限制某个用户访问某个接口的频率</li>
+<li><strong>好友关系</strong>，利用集合的交并补实现共同好友之类的功能。</li>
+</ol>
+<h2 id="Redis的数据类型有那些"><a href="#Redis的数据类型有那些" class="headerlink" title="Redis的数据类型有那些"></a>Redis的数据类型有那些</h2><h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>​	是一种二进制安全的数据结构。可以是字符串、数字或者二进制。虽然Redis是由C语言写的，但并没有使用C的原生字符串，而是自己开发的<strong>SDS</strong>。<strong>不光可以保存文本数据还可以保存二进制数据</strong>，并且获取字符串长度复杂度为 O(1)，<strong>同时可以避免数据区溢出</strong>。其值最大不能超过512MB.</p>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>​	是一个键值对集合，适合用于存储对象，底层由<strong>数组加链表</strong>实现</p>
+<h3 id="List"><a href="#List" class="headerlink" title="List"></a>List</h3><p>​	有序可重复的集合，底层由<strong>双向链表</strong>实现。</p>
+<h3 id="Set"><a href="#Set" class="headerlink" title="Set"></a>Set</h3><p>​	无序去重的集合，提供了交并等方法，可以用来实现共同好友等功能。</p>
+<h3 id="SortedSet"><a href="#SortedSet" class="headerlink" title="SortedSet"></a>SortedSet</h3><p>​	和 Set 相比，Sorted Set 增加了一个权重参数 <code>score</code>，使得集合中的元素能够按 <code>score</code> 进行有序排列</p>
+<h3 id="Bitmap"><a href="#Bitmap" class="headerlink" title="Bitmap"></a>Bitmap</h3><p>​	位图存储的是连续的二进制数字，通过 Bitmap, 只需要一个 bit 位来表示某个元素对应的值或者状态，可以大大节省存储空间。</p>
+<h3 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h3><p>​	其特点是输入元素的数量非常大或体积非常大时，计算基数所需的空间是固定且非常小的。</p>
+<h3 id="Geospatial"><a href="#Geospatial" class="headerlink" title="Geospatial"></a>Geospatial</h3><p>​	用于存储地理位置信息</p>
+<h2 id="持久化机制"><a href="#持久化机制" class="headerlink" title="持久化机制"></a>持久化机制</h2><p>​	持久化就是把内存中的数据写到磁盘中，防止服务宕机导致内存数据丢失。Redis支持<strong>RDB</strong>和<strong>AOF</strong>两种方式，<strong>前者会根据指定的规则定时将内存中的数据存储在硬盘上，后者在每次执行完命令后将命令记录下来</strong>。</p>
+<h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><p>​	Redis默认的持久化方案，会将内存中的数据写入到磁盘中，在指定目录下生成一个dump.rdb文件，重启后会加载dump文件恢复数据。Redis启动时会读取RDB快照文件，将数据从硬盘载入内存。通过RDB方式的持久化，一旦Redis异常退出就<strong>会丢失最近一次持久化以后更改的数据</strong>。</p>
+<h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><p>​	记录下每次执行的命令，重启时重新执行AOF文件中的命令以达到恢复数据的目的。</p>
+<h2 id="缓存相关的问题"><a href="#缓存相关的问题" class="headerlink" title="缓存相关的问题"></a>缓存相关的问题</h2><h3 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h3><p>​	查询一个<strong>不存在的数据</strong>，缓存未命中后就去查询DB，但DB里也没这个数据，所以没法更新缓存，下次查询时仍然直接作用于DB，缓存就像不存在一样。当流量大时，DB就挂掉了。</p>
+<p>解决方案：</p>
+<ul>
+<li><strong>缓存空值</strong>，把这个不存在的key在缓存中放置一个空值，下次查询的时候就直接返回null</li>
+<li><strong>布隆过滤器</strong>，如果查询的key不在布隆过滤器里就直接返回不存在。</li>
+</ul>
+<h3 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h3><p>​	大量的请求同时查询一个key时，这个key在缓存中突然过期了。然后这些请求就直接落到DB上，把DB搞挂掉了。</p>
+<p>解决方案：</p>
+<ul>
+<li>加互斥锁，只允许一个请求查询DB，让他们排队慢慢来，防止大量的请求同时落到DB上</li>
+<li>热点数据不过期：如果一个数据经常访问，可以在缓存中设置让他不过期。但要考虑数据不一致的问题。</li>
+<li>缓存预热：将其存入缓存中并设置合理的过期时间。</li>
+</ul>
+<h3 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h3><p>​	设置缓存时设置的过期时间相同，导致同一时间大量缓存过期，然后DB压力过大导致挂掉</p>
+<p>解决方案：</p>
+<ul>
+<li>在原有的失效时间上加一个随机值，降低过期时间的重复率</li>
+<li>加互斥锁，防止同时大量请求落到DB上</li>
+<li>二级缓存，redis失效后查二级缓存</li>
+</ul>
+<h2 id="Big-key（大key）"><a href="#Big-key（大key）" class="headerlink" title="Big key（大key）"></a>Big key（大key）</h2><p>​	如果一个key对应的value过大，那么这个key就是大key。除了会消耗更多的内存空间，bigkey 对性能也会有比较大的影响。</p>
+<p>怎么处理：</p>
+<ul>
+<li>当value是String时，可以使用序列化、压缩算法将key的大小控制在合理范围内。也可以将key进行拆分，将大key拆分成几个小key</li>
+<li>当value是list等集合是，根据数据规模进行分片，不同的元素计算后分到不同的片中。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Redis</tag>
       </tags>
   </entry>
 </search>
