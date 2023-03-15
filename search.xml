@@ -1034,7 +1034,105 @@
   <entry>
     <title>Spring和MyBatis</title>
     <url>/2023/03/14/Java/Java-Spring%E5%92%8CMyBatis/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p><em><strong><u>学Java哪有不疯的，哈哈</u></strong></em></p>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><p>​	控制反转是一种设计思想。就是<strong>将原本在程序中手动创建对象的控制权交由Spring框架来管理</strong>。最直接的体现就是不用去new一个对象了，而是由Spring容器来管理一个叫<strong>bean</strong>的东西，控制它的整个生命周期。Spring通过Java的<strong>反射</strong>机制来实现对其他对象的控制，包括初始化、创建、销毁等，解放手动创建对象的过程，同时降低类之间的耦合度。</p>
+<h3 id="IoC的好处"><a href="#IoC的好处" class="headerlink" title="IoC的好处"></a>IoC的好处</h3><p>​	资源不由使用资源者管理，而有不使用资源的第三方管理。</p>
+<ul>
+<li>资源集中管理，实现资源的可配置和易管理</li>
+<li>降低了使用资源双方的依赖程度，也就是耦合度</li>
+</ul>
+<h3 id="DI（依赖注入）"><a href="#DI（依赖注入）" class="headerlink" title="DI（依赖注入）"></a>DI（依赖注入）</h3><p>​	IOC最常见的实现方式是依赖注入，指的是在Spring创建对象的过程中，把对象依赖的属性注入到对象中。</p>
+<p>​	在SpringBoot中可以使用@Autowired注解进行依赖注入</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@RequestMapping(&quot;test&quot;)</span><br><span class="hljs-meta">@RestController</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestController</span> &#123;<br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> Cat cat;<br>    <span class="hljs-meta">@RequestMapping(&quot;say&quot;)</span><br>    <span class="hljs-keyword">private</span> String <span class="hljs-title function_">login</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> cat.sayHello();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>​	也可以使用set的方式，在xml文件中注入</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//（1）创建类，定义属性和对应的 set 方法</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Book</span> &#123;<br>	<span class="hljs-comment">//创建属性</span><br>	<span class="hljs-keyword">private</span> String bname;<br>	<span class="hljs-keyword">private</span> String bauthor;<br>	<span class="hljs-comment">//创建属性对应的 set 方法</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setBname</span><span class="hljs-params">(String bname)</span> &#123;<br>		<span class="hljs-built_in">this</span>.bname = bname;<br>	&#125;<br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">setBauthor</span><span class="hljs-params">(String bauthor)</span> &#123;<br>		<span class="hljs-built_in">this</span>.bauthor = bauthor;<br>	&#125; <br>&#125;<br><span class="hljs-comment">//（2）在 spring 配置文件配置对象创建，配置属性注入</span><br>&lt;bean id=<span class="hljs-string">&quot;book&quot;</span> class=<span class="hljs-string">&quot;com.atguigu.spring5.Book&quot;</span>&gt;<br>	<span class="hljs-comment">//使用 property 完成属性注入</span><br>	<span class="hljs-comment">//name：类里面属性名称</span><br>	<span class="hljs-comment">//value：向属性注入的值</span><br>	&lt;property name=<span class="hljs-string">&quot;bname&quot;</span> value=<span class="hljs-string">&quot;西游记&quot;</span>&gt;&lt;/property&gt;<br>	&lt;property name=<span class="hljs-string">&quot;bauthor&quot;</span> value=<span class="hljs-string">&quot;吴承恩&quot;</span>&gt;&lt;/property&gt;<br>&lt;/bean&gt;<br><br></code></pre></td></tr></table></figure>
+
+<p>​	有参构造也是可以的</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//（1）创建类，定义属性，创建属性对应有参数构造方法</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Book</span> &#123;<br>	<span class="hljs-comment">//属性</span><br>	<span class="hljs-keyword">private</span> String bname;<br>	<span class="hljs-keyword">private</span> String bauthor;<br>	<span class="hljs-comment">//有参数构造</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-title function_">Orders</span><span class="hljs-params">(String bname,String bauthor)</span> &#123;<br>		<span class="hljs-built_in">this</span>.bname= bname;<br>		<span class="hljs-built_in">this</span>.bauthor= bauthor;<br>	&#125; <br>&#125;<br><span class="hljs-comment">//（2）在 spring 配置文件中进行配置</span><br>&lt;bean id=<span class="hljs-string">&quot;orders&quot;</span> class=<span class="hljs-string">&quot;com.atguigu.spring5.Orders&quot;</span>&gt;<br>	&lt;constructor-arg name=<span class="hljs-string">&quot;bname&quot;</span> value=<span class="hljs-string">&quot;三国演义&quot;</span>&gt;&lt;/constructor-arg&gt;<br>	&lt;constructor-arg name=<span class="hljs-string">&quot;bauthor&quot;</span> value=<span class="hljs-string">&quot;罗贯中&quot;</span>&gt;&lt;/constructor-arg&gt;<br>&lt;/bean&gt;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h3><p>​	Bean代指的就是那些被IoC容器所管理的对象。我们需要告诉IoC容器帮助我们管理哪些对象，这个是通过配置元数据来定义的。配置元数据可以是 XML 文件、注解或者 Java 配置类。</p>
+<h4 id="创建Bean的方式"><a href="#创建Bean的方式" class="headerlink" title="创建Bean的方式"></a>创建Bean的方式</h4><ul>
+<li>直接在xml文件中声明一个类为Bean</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- Constructor-arg with &#x27;value&#x27; attribute --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;...&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;...&quot;</span>&gt;</span><br>   <span class="hljs-tag">&lt;<span class="hljs-name">constructor-arg</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;...&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>使用@Component,@Service,@Controller,@Repository注解</p>
+<ul>
+<li><strong>@Component</strong> : 侧重于通用的Bean类</li>
+<li><strong>@Service</strong>：标识该类用于业务逻辑</li>
+<li><strong>@Controller</strong>：标识该类为Spring MVC的控制器类</li>
+<li><strong>@Repository</strong>: 对应持久即Dao层，只有属性和Setter,Getter</li>
+</ul>
+</li>
+<li><p>使用@Bean注解,这种方式用在Spring Boot 应用中</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//@Configuration 标识这是一个Spring Boot 配置类</span><br><span class="hljs-comment">//其将会扫描该类中是否存在@Bean 注解的方法</span><br><span class="hljs-comment">//比如如下代码，将会创建User对象并放入容器中。</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserConfiguration</span>&#123;<br>     <br>      <span class="hljs-meta">@Bean</span>　　　 <br>      <span class="hljs-meta">@ConditionalOnBean(Location.class)</span><br>      <span class="hljs-keyword">public</span> User <span class="hljs-title function_">user</span><span class="hljs-params">()</span>&#123;<br>           <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>      &#125;<br>      <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用注解@Import,也会创建对象并注入容器中</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Import(User.class)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MicroblogUserWebApplication</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String args[])</span> &#123;<br>        SpringApplication.run(MicroblogUserWebApplication.class, args);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Component-和-Bean-的区别是什么？"><a href="#Component-和-Bean-的区别是什么？" class="headerlink" title="@Component 和 @Bean 的区别是什么？"></a>@Component 和 @Bean 的区别是什么？</h4><ul>
+<li>@Component注解作用于类，@Bean注解作用于方法</li>
+<li>@Component通常是通过类路径扫描来自动侦测以及自动装配到Spring容器中。@Bean注解通常是在标有该注解的方法中定义产生这个bean，告诉Spring这是某个类的实例。</li>
+<li>@bean注解比@Component注解的自定义性更强，比如引用第三方库中的类时只能用@Bean</li>
+</ul>
+<h4 id="注入Bean的注解有哪些？"><a href="#注入Bean的注解有哪些？" class="headerlink" title="注入Bean的注解有哪些？"></a>注入Bean的注解有哪些？</h4><p>@Autowired @Resource @Inject</p>
+<h4 id="Autowired和-Resource的区别是什么"><a href="#Autowired和-Resource的区别是什么" class="headerlink" title="@Autowired和@Resource的区别是什么"></a>@Autowired和@Resource的区别是什么</h4><ul>
+<li>Autowired属于<strong>Spring内置</strong>的注解，默认的注入方式为<strong>byType</strong>，也就是<strong>按类型匹配</strong>，优先根据接口类型去匹配并注入Bean。但如果出现某个类型下有好几个实现类的情况的话就会出错，这种情况下就要再加个@Qualifier注解来显式指定名称。</li>
+<li>Resource属于<strong>JDK提供</strong>的注解，默认注入方式为byName，有两个比较重要的属性:name(名称)，type(类型)。可以通过name属性来显示指定名称。</li>
+</ul>
+<h4 id="Bean的作用域有哪些？"><a href="#Bean的作用域有哪些？" class="headerlink" title="Bean的作用域有哪些？"></a>Bean的作用域有哪些？</h4><p>​	通过加个@scope注解来配置bean的作用域</p>
+<ul>
+<li><strong>singleton</strong>：容器中只有唯一的bean实例。默认都是单例的。</li>
+<li><strong>prototype</strong>：每次获取都会创建一个新的 bean 实例。</li>
+<li><strong>request</strong> ：每次HTTP请求都会产生一个新的bean，该bean仅在当前的HTTP request中有效。</li>
+<li><strong>session</strong>：每次来自新的session的HTTP请求都会产生一个新的bean，该bean仅在当前的HTTP session内有效。</li>
+<li><strong>application&#x2F;global-session</strong>：每个Web应用在启动时创建一个Bean，该Bean仅在当前应用启动时间内有效。</li>
+<li><strong>websocket</strong>：每一次websocket会话产生一个新的bean。</li>
+</ul>
+<h4 id="单例-Bean-的线程安全问题了解吗？"><a href="#单例-Bean-的线程安全问题了解吗？" class="headerlink" title="单例 Bean 的线程安全问题了解吗？"></a>单例 Bean 的线程安全问题了解吗？</h4><p>​	单例Bean存在线程问题，主要是因为当多个线程操作同一个对象的时候是存在资源竞争的。</p>
+<p>​	解决方法：</p>
+<ol>
+<li>在Bean中尽量避免定义可变的成员变量。</li>
+<li>在类中定义ThreadLocal成员变量，将需要的可变成员变量保存在ThreadLocal中。</li>
+</ol>
+<p>​	但一般的Bean实际上都是无状态的，如Dao，Service，所以大部分情况下Bean是线程安全的。</p>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>​	将那些与具体业务实现无关，却被业务共同调用的部分封装起来，减少系统的重复代码，是开闭原则的体现。比如在一些业务中需要在执行之前验证用户权限，验证权限的实现逻辑其实是一样的，就可以把他们抽象成一个切面，然后由Spring统一注入到业务代码中。</p>
+<h3 id="AOP有哪些实现方式？"><a href="#AOP有哪些实现方式？" class="headerlink" title="AOP有哪些实现方式？"></a>AOP有哪些实现方式？</h3><h4 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h4><p>​	基于XML配置的Spring AOP，采用声明的方式实现，在XML文件中配置，大致步骤为：配置文件中配置pointcut，在java中编写实际的aspect类，针对切入点进行相关的业务处理。</p>
+<p>​	通俗来说就是在类中写好方法，然后在xml里配置切点，切面和通知等。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"> <span class="hljs-tag">&lt;<span class="hljs-name">aop:config</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">aop:aspect</span> <span class="hljs-attr">ref</span>=<span class="hljs-string">&quot;aspectBean&quot;</span>&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:pointcut</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;pointcut&quot;</span> <span class="hljs-attr">expression</span>=<span class="hljs-string">&quot;execution(* com.spring.service.impl.UserManagerServiceImpl..*(..))&quot;</span>/&gt;</span><br>     <br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:before</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;doBefore&quot;</span> <span class="hljs-attr">pointcut-ref</span>=<span class="hljs-string">&quot;pointcut&quot;</span>/&gt;</span> <br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:after-returning</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;doAfterReturning&quot;</span> <span class="hljs-attr">pointcut-ref</span>=<span class="hljs-string">&quot;pointcut&quot;</span> <span class="hljs-attr">returning</span>=<span class="hljs-string">&quot;result&quot;</span>/&gt;</span><br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:after</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;doAfter&quot;</span> <span class="hljs-attr">pointcut-ref</span>=<span class="hljs-string">&quot;pointcut&quot;</span> /&gt;</span> <br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:around</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;doAround&quot;</span> <span class="hljs-attr">pointcut-ref</span>=<span class="hljs-string">&quot;pointcut&quot;</span>/&gt;</span> <br>     <span class="hljs-tag">&lt;<span class="hljs-name">aop:after-throwing</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;doAfterThrowing&quot;</span> <span class="hljs-attr">pointcut-ref</span>=<span class="hljs-string">&quot;pointcut&quot;</span> <span class="hljs-attr">throwing</span>=<span class="hljs-string">&quot;ex&quot;</span>/&gt;</span><br>   <span class="hljs-tag">&lt;/<span class="hljs-name">aop:aspect</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">aop:config</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h4><p>​	主要就是使用使用aspectJ的注解来进行创建，通过加上**@Aspect<strong>注解表明这是个切面，在默认构造函数上加上</strong>@PointCut<strong>表明切入点表达式，然后在那些通知方法上加上</strong>@Before**,<strong>@Around</strong>这种注解声明在什么时候使用这个通知。</p>
+<p>​	这种方式也要在xml文件中<strong>声明spring对@AspectJ的支持</strong>并<strong>声明通知类</strong>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.spring.aop;<br><br><span class="hljs-keyword">import</span> org.aspectj.lang.JoinPoint;<br><span class="hljs-keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.After;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.AfterReturning;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.AfterThrowing;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Around;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Aspect;<br><span class="hljs-keyword">import</span> org.aspectj.lang.annotation.Before;<br><br><span class="hljs-meta">@Aspect</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AopAspectJ</span> &#123;<br>    <br>    <span class="hljs-comment">/**  </span><br><span class="hljs-comment">     * 必须为final String类型的,注解里要使用的变量只能是静态常量类型的  </span><br><span class="hljs-comment">     */</span>  <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String EDP=<span class="hljs-string">&quot;execution(* com.spring.service.impl.UserManagerServiceImpl..*(..))&quot;</span>;<br>    <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 切面的前置方法 即方法执行前拦截到的方法</span><br><span class="hljs-comment">      * 在目标方法执行之前的通知</span><br><span class="hljs-comment">      * <span class="hljs-doctag">@param</span> jp</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Before(EDP)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doBefore</span><span class="hljs-params">(JoinPoint jp)</span>&#123;<br>        <br>        System.out.println(<span class="hljs-string">&quot;=========执行前置通知==========&quot;</span>);<br>    &#125;<br>    <br>    <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 在方法正常执行通过之后执行的通知叫做返回通知</span><br><span class="hljs-comment">      * 可以返回到方法的返回值 在注解后加入returning </span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> jp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> result</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@AfterReturning(value=EDP,returning=&quot;result&quot;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doAfterReturning</span><span class="hljs-params">(JoinPoint jp,String result)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;===========执行后置通知============&quot;</span>);<br>    &#125;<br>    <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 最终通知：目标方法调用之后执行的通知（无论目标方法是否出现异常均执行）</span><br><span class="hljs-comment">      * <span class="hljs-doctag">@param</span> jp</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@After(value=EDP)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doAfter</span><span class="hljs-params">(JoinPoint jp)</span>&#123;<br>        System.out.println(<span class="hljs-string">&quot;===========执行最终通知============&quot;</span>);<br>    &#125;<br>    <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 环绕通知：目标方法调用前后执行的通知，可以在方法调用前后完成自定义的行为。</span><br><span class="hljs-comment">      * <span class="hljs-doctag">@param</span> pjp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@return</span></span><br><span class="hljs-comment">     * <span class="hljs-doctag">@throws</span> Throwable</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@Around(EDP)</span><br>    <span class="hljs-keyword">public</span> Object <span class="hljs-title function_">doAround</span><span class="hljs-params">(ProceedingJoinPoint pjp)</span> <span class="hljs-keyword">throws</span> Throwable&#123;<br><br>        System.out.println(<span class="hljs-string">&quot;======执行环绕通知开始=========&quot;</span>);<br>        <span class="hljs-comment">// 调用方法的参数</span><br>        Object[] args = pjp.getArgs();<br>        <span class="hljs-comment">// 调用的方法名</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">method</span> <span class="hljs-operator">=</span> pjp.getSignature().getName();<br>        <span class="hljs-comment">// 获取目标对象</span><br>        <span class="hljs-type">Object</span> <span class="hljs-variable">target</span> <span class="hljs-operator">=</span> pjp.getTarget();<br>        <span class="hljs-comment">// 执行完方法的返回值</span><br>        <span class="hljs-comment">// 调用proceed()方法，就会触发切入点方法执行</span><br>        Object result=pjp.proceed();<br>        System.out.println(<span class="hljs-string">&quot;输出,方法名：&quot;</span> + method + <span class="hljs-string">&quot;;目标对象：&quot;</span> + target + <span class="hljs-string">&quot;;返回值：&quot;</span> + result);<br>        System.out.println(<span class="hljs-string">&quot;======执行环绕通知结束=========&quot;</span>);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>    <br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 在目标方法非正常执行完成, 抛出异常的时候会走此方法</span><br><span class="hljs-comment">      * <span class="hljs-doctag">@param</span> jp</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> ex</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-meta">@AfterThrowing(value=EDP,throwing=&quot;ex&quot;)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doAfterThrowing</span><span class="hljs-params">(JoinPoint jp,Exception ex)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;===========执行异常通知============&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="AspectJ-定义的通知类型有哪些？"><a href="#AspectJ-定义的通知类型有哪些？" class="headerlink" title="AspectJ 定义的通知类型有哪些？"></a>AspectJ 定义的通知类型有哪些？</h3><ul>
+<li>before:目标对象的方法调用之前触发</li>
+<li>after:目标对象的方法调用之后触发</li>
+<li>afterReturning:目标对象的方法调用完成，在返回结果值之后触发</li>
+<li>afterThrowing:目标对象抛出异常后触发</li>
+<li>around：可以任意的在目标对象的方法调用前后触发</li>
+</ul>
+<h3 id="Spring-AOP的实现原理"><a href="#Spring-AOP的实现原理" class="headerlink" title="Spring AOP的实现原理"></a>Spring AOP的实现原理</h3><p>​	通过<strong>动态代理</strong>实现。如果我们为Spring的某个bean配置了切面，那么Spring在创建这个bean的时候，实际上创建的是这个bean的一个<strong>代理对象</strong>，后续对bean中方法的调用，实际上<strong>调用的是代理类重写的代理方法</strong>，AOP使用了两种动态代理，分别是<strong>JDK的动态代理</strong>和<strong>CGLib的动态代理</strong>。</p>
+<h3 id="JDK动态代理和CGLIB动态代理的区别？"><a href="#JDK动态代理和CGLIB动态代理的区别？" class="headerlink" title="JDK动态代理和CGLIB动态代理的区别？"></a>JDK动态代理和CGLIB动态代理的区别？</h3><ol>
+<li>JDK动态代理使用jdk中的类Proxy来创建代理对象，使用反射技术来实现，不需要导入其他的依赖。CGLIB需要导入相关依赖，使用字节码增强技术来实现。</li>
+<li>当目标类实现了接口的时候，默认使用JDK动态代理方式来增强方法，没有实现接口的时候使用CGLIB动态代理方法来增强方法。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Java</tag>
+        <tag>Spring</tag>
+        <tag>MyBatis</tag>
+      </tags>
   </entry>
   <entry>
     <title>Redis知识点及考点整理</title>
