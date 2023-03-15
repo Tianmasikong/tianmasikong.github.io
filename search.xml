@@ -1033,7 +1033,7 @@
   </entry>
   <entry>
     <title>Spring和MyBatis</title>
-    <url>/2023/03/14/Java/Java-Spring%E5%92%8CMyBatis/</url>
+    <url>/2023/03/15/Java/Java-Spring%E5%92%8CMyBatis/</url>
     <content><![CDATA[<p><em><strong><u>学Java哪有不疯的，哈哈</u></strong></em></p>
 <h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><p>​	控制反转是一种设计思想。就是<strong>将原本在程序中手动创建对象的控制权交由Spring框架来管理</strong>。最直接的体现就是不用去new一个对象了，而是由Spring容器来管理一个叫<strong>bean</strong>的东西，控制它的整个生命周期。Spring通过Java的<strong>反射</strong>机制来实现对其他对象的控制，包括初始化、创建、销毁等，解放手动创建对象的过程，同时降低类之间的耦合度。</p>
 <h3 id="IoC的好处"><a href="#IoC的好处" class="headerlink" title="IoC的好处"></a>IoC的好处</h3><p>​	资源不由使用资源者管理，而有不使用资源的第三方管理。</p>
