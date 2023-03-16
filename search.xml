@@ -1218,4 +1218,21 @@
         <tag>Redis</tag>
       </tags>
   </entry>
+  <entry>
+    <title>项目介绍整理</title>
+    <url>/2023/03/16/%E5%A4%A7%E5%AD%A6/%E8%BD%AF%E7%BB%9F/%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E6%95%B4%E7%90%86/</url>
+    <content><![CDATA[<h1 id="企业ERP管理系统"><a href="#企业ERP管理系统" class="headerlink" title="企业ERP管理系统"></a>企业ERP管理系统</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>​	某公司规模扩大，企业业务量、办公场所、员工数都发生增长。为适应新的环境，提高工作效率和用户满意度，开发一套ERP 系统。该系统主要包括库存管理、销售管理、财务管理、人事管理和企业经营管理等功能。</p>
+<h2 id="基本业务逻辑"><a href="#基本业务逻辑" class="headerlink" title="基本业务逻辑"></a>基本业务逻辑</h2><p>​	使用该系统的用户主要分为库存管理人员，进货销售人员，财务人员，人力资源人员和总经理。系统会根据用户身份的不同提供对应的业务功能，如库存管理人员可以进行商品管理，商品分类管理，库存报损，入库出库等操作。总经理可以进行单据审批，指定年终奖，查看经营历程等功能。</p>
+<h2 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h2><p>​	前端调用post路由，向后端发送一个含有用户账号和密码的VO对象，service层通过账号去数据库中寻找相应账户，将VO对象中的密码与数据库中取出并解密后的密码相比对，返回一个JWT token，这里我们采用的加密方式是<strong>codec</strong>加密，JWT token的设计使用了<strong>工厂模式</strong>，向工厂中传入包含用户名，用户身份的对象，工厂自行解析后在token中加入token过期日期，签发时间和secret加密等补充信息后交付前端。</p>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>​	由于每个用户所在的用户组的操作权限不同，因此在controller层我们加入判断前端用户的身份是否与该操作所需身份相符的逻辑，由于大部分的controller（除了login）都需要判断用户身份权限，于是我把这个鉴权部分抽象成一个切面。同时自定义了一个**@Authorized**注解，这个注解加在每个路由上，通过设置他的value来设置这个路由所要求的用户身份，切面会在具体调用路由之前进行通知，通过比对用户token中的身份与所需身份是否相同来进行鉴权。</p>
+<h2 id="员工打卡"><a href="#员工打卡" class="headerlink" title="员工打卡"></a>员工打卡</h2><p>​	由于员工打卡信息不需要经常变动，但我们的前端接口需要保证员工打卡信息及时显示到前端页面上的，所以对数据库中这个字段的查询会比较频繁，因此我们采用了Redis缓存的方式来减轻DB的压力，我们选取了Bitmap数据接口存储员工打卡信息。内部的key是员工id+年月的形式，执行打卡时去相应的key中把天数对应的bit为置为1就行了。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>项目介绍</tag>
+      </tags>
+  </entry>
 </search>
