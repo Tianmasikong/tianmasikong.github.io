@@ -197,7 +197,7 @@ Spring是如何解决循环依赖的问题的？​	...">
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 17, 2023</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>3051</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>3061</span>
     </div>
   </div>
 </section>
@@ -273,7 +273,7 @@ Spring是如何解决循环依赖的问题的？​	...">
 <h4 id="先写MySQL，再根据Binlog，异步更新Redis"><a href="#先写MySQL，再根据Binlog，异步更新Redis" class="headerlink" title="先写MySQL，再根据Binlog，异步更新Redis"></a>先写MySQL，再根据Binlog，异步更新Redis</h4><p><img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/17/72ef70228e4bd439.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>​	这种方案，主要是监听 MySQL 的 Binlog，然后通过异步的方式，将数据更新到 Redis，这种方案有个前提，查询的请求，不会回写 Redis。</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_70730532/article/details/125870478">https://blog.csdn.net/weixin_70730532/article/details/125870478</a></p>
-
+<h2 id="MySQL的分库分表"><a href="#MySQL的分库分表" class="headerlink" title="MySQL的分库分表"></a>MySQL的分库分表</h2>
       </section>
       <section class="extra">
         
@@ -336,7 +336,7 @@ Spring是如何解决循环依赖的问题的？​	...">
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E9%97%AE%E9%A2%98%E7%9A%84%EF%BC%9F"><span class="toc-text">Spring是如何解决循环依赖的问题的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post%E5%92%8CGet%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">Post和Get的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C-MySQL-%E5%92%8C-Redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F"><span class="toc-text">如何保障 MySQL 和 Redis 的数据一致性？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-text">不好的方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-text">好的方案</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring%E6%98%AF%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E7%9A%84%E9%97%AE%E9%A2%98%E7%9A%84%EF%BC%9F"><span class="toc-text">Spring是如何解决循环依赖的问题的？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post%E5%92%8CGet%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">Post和Get的区别？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E9%9A%9C-MySQL-%E5%92%8C-Redis-%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%9F"><span class="toc-text">如何保障 MySQL 和 Redis 的数据一致性？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-text">不好的方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-text">好的方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL%E7%9A%84%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="toc-text">MySQL的分库分表</span></a></li></ol>
   </aside>
 
         

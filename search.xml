@@ -1307,6 +1307,6 @@
 <h4 id="先写MySQL，再根据Binlog，异步更新Redis"><a href="#先写MySQL，再根据Binlog，异步更新Redis" class="headerlink" title="先写MySQL，再根据Binlog，异步更新Redis"></a>先写MySQL，再根据Binlog，异步更新Redis</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/72ef70228e4bd439.png"></p>
 <p>​	这种方案，主要是监听 MySQL 的 Binlog，然后通过异步的方式，将数据更新到 Redis，这种方案有个前提，查询的请求，不会回写 Redis。</p>
 <p>参考：<a href="https://blog.csdn.net/weixin_70730532/article/details/125870478">https://blog.csdn.net/weixin_70730532/article/details/125870478</a></p>
-]]></content>
+<h2 id="MySQL的分库分表"><a href="#MySQL的分库分表" class="headerlink" title="MySQL的分库分表"></a>MySQL的分库分表</h2>]]></content>
   </entry>
 </search>
