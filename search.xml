@@ -1238,7 +1238,8 @@
   <entry>
     <title>部分八股补充</title>
     <url>/2023/03/17/Java/%E9%83%A8%E5%88%86%E5%85%AB%E8%82%A1%E8%A1%A5%E5%85%85/</url>
-    <content><![CDATA[<h2 id="Spring是如何解决循环依赖的问题的？"><a href="#Spring是如何解决循环依赖的问题的？" class="headerlink" title="Spring是如何解决循环依赖的问题的？"></a>Spring是如何解决循环依赖的问题的？</h2><p>​	什么是循环依赖？简单来说就是A对象中依赖了B对象，B对象中依赖了A对象</p>
+    <content><![CDATA[<p><strong><u><em>欢迎补充</em></u></strong></p>
+<h2 id="Spring是如何解决循环依赖的问题的？"><a href="#Spring是如何解决循环依赖的问题的？" class="headerlink" title="Spring是如何解决循环依赖的问题的？"></a>Spring是如何解决循环依赖的问题的？</h2><p>​	什么是循环依赖？简单来说就是A对象中依赖了B对象，B对象中依赖了A对象</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// A依赖了B</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">A</span>&#123;<br>	<span class="hljs-keyword">public</span> B b;<br>&#125; <br><br><span class="hljs-comment">// B依赖了A</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">B</span>&#123;<br>	<span class="hljs-keyword">public</span> A a;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
 <p>​	如果不考虑Spring，循环依赖就不是个问题，因为循环依赖在代码中其实是非常常见的</p>
@@ -1261,7 +1262,7 @@
 <p>​	在创建B的时候，Spring发现B中依赖一个属性A，但他发现此时缓存中存在一个A的实例，于是把这个A的实例赋值给B中的属性，需要注意的是，这个A的实例此时还是个半成品，因为其属性B还没有被正确赋值。</p>
 <p>​	此时创建B的过程就完成了，getBean()方法成功返回了一个创建好的B实例并把它设置给A的属性值，最终结束A的实例化。</p>
 <p>​	需要注意的是，在递归创建B的过程中，给B的属性值赋值的A是个半成品，但由于Spring给他赋值的其实是A实例的一个<strong>引用而不是拷贝</strong>，于是在最终A实例创建完成后，B实例中的半成品A也会成为完成品。</p>
-<p><img src="https://img-blog.csdnimg.cn/4f8be94c2b604ff09bff074414221a5c.png"></p>
+<p><img src="https://s3.bmp.ovh/imgs/2023/03/17/c7270601eaddb0a1.png"></p>
 <p>​	而多级缓存主要用来解决IOC和AOP之间的循环依赖问题，一个缓存用来存储原始对象进行OP后生成的代理对象，另一个则存放IOC中生成的原始对象。（瞎b的这里，没看懂）</p>
 <p>​	</p>
 <p>参考：<a href="https://blog.csdn.net/CRMEB/article/details/122316641">https://blog.csdn.net/CRMEB/article/details/122316641</a></p>
@@ -1279,6 +1280,33 @@
 </ul>
 <p>参考：<a href="https://blog.csdn.net/guorui_java/article/details/112294323">https://blog.csdn.net/guorui_java/article/details/112294323</a></p>
 <p>​			<a href="https://zhuanlan.zhihu.com/p/73475134">https://zhuanlan.zhihu.com/p/73475134</a></p>
+<h2 id="如何保障-MySQL-和-Redis-的数据一致性？"><a href="#如何保障-MySQL-和-Redis-的数据一致性？" class="headerlink" title="如何保障 MySQL 和 Redis 的数据一致性？"></a>如何保障 MySQL 和 Redis 的数据一致性？</h2><p>结论：<strong>在满足实时性的条件下，不存在两者完全保存一致的方案，只有最终一致性方案。</strong></p>
+<h3 id="不好的方案"><a href="#不好的方案" class="headerlink" title="不好的方案"></a>不好的方案</h3><h4 id="先写MySQL，再写Redis"><a href="#先写MySQL，再写Redis" class="headerlink" title="先写MySQL，再写Redis"></a>先写MySQL，再写Redis</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/40cb96d94d23c99a.png"></p>
+<p>​	考虑A和B一起写的场景。	</p>
+<p>​	如果A写完MySQL后卡了一会，B先写完MySQL后写到Redis上，请求A卡完了再把数据写到Redis上，就会导致MySQL和Redis的最新数据不一致的问题。</p>
+<h4 id="先写Redis，再写MySQL"><a href="#先写Redis，再写MySQL" class="headerlink" title="先写Redis，再写MySQL"></a>先写Redis，再写MySQL</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/342b3eaf22ab6cc4.png"></p>
+<p>​	考虑A和B一起写的场景。</p>
+<p>​	和上面那个一样的，不多说</p>
+<h4 id="先删除Redis，再更新MySQL"><a href="#先删除Redis，再更新MySQL" class="headerlink" title="先删除Redis，再更新MySQL"></a>先删除Redis，再更新MySQL</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/e44571e42ea4317d.png"></p>
+<p>​	考虑A写，B读的场景，B如果在缓存中未命中，则会去读DB然后会写到缓存中</p>
+<ol>
+<li>A先把redis中的缓存删除，然后因为卡了一下，没有写到MySQL中</li>
+<li>B读redis发现没有命中，查询MySQL获得了旧值</li>
+<li>A卡完了，把新值写入MySQL</li>
+<li>B把旧值写回redis</li>
+</ol>
+<h3 id="好的方案"><a href="#好的方案" class="headerlink" title="好的方案"></a>好的方案</h3><h4 id="先删除Redis，再更新MySQL，再删除Redis"><a href="#先删除Redis，再更新MySQL，再删除Redis" class="headerlink" title="先删除Redis，再更新MySQL，再删除Redis"></a>先删除Redis，再更新MySQL，再删除Redis</h4><p>​	对于“先删除 Redis，再写 MySQL”，如果要解决最后的不一致问题，其实再对 Redis 重新删除即可，这个也是大家常说的“缓存双删”。</p>
+<p><img src="https://s3.bmp.ovh/imgs/2023/03/17/2fc8cd32fb7f1842.png"></p>
+<p>​	在请求A的最后增加一步：再删除缓存中的旧值。</p>
+<p>​	但这里有个问题，如何保证这一步在所有操作的最后呢？有一种方案就是让请求A的最后一次删除等待500ms，但这太low了。</p>
+<p>​	可以通过消息队列的异步&amp;穿行实现最后一次删除，删除缓存内请求入队列</p>
+<p>​	如果删除失败就增加重试机制。</p>
+<h4 id="先更新MySQL，再删除Redis"><a href="#先更新MySQL，再删除Redis" class="headerlink" title="先更新MySQL，再删除Redis"></a>先更新MySQL，再删除Redis</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/38230d264375e7ec.png"></p>
+<p>​	对于上面这种情况，对于第一次查询，请求 B 查询的数据是 10，但是 MySQL 的数据是 11，只存在这一次不一致的情况，对于不是强一致性要求的业务，可以容忍。（那什么情况下不能容忍呢，比如秒杀业务、库存服务等。）</p>
+<p>​	当请求 B 进行第二次查询时，因为没有命中 Redis，会重新查一次 DB，然后再回写到 Reids。</p>
+<h4 id="先写MySQL，再根据Binlog，异步更新Redis"><a href="#先写MySQL，再根据Binlog，异步更新Redis" class="headerlink" title="先写MySQL，再根据Binlog，异步更新Redis"></a>先写MySQL，再根据Binlog，异步更新Redis</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/72ef70228e4bd439.png"></p>
+<p>​	这种方案，主要是监听 MySQL 的 Binlog，然后通过异步的方式，将数据更新到 Redis，这种方案有个前提，查询的请求，不会回写 Redis。</p>
+<p>参考：<a href="https://blog.csdn.net/weixin_70730532/article/details/125870478">https://blog.csdn.net/weixin_70730532/article/details/125870478</a></p>
 ]]></content>
   </entry>
 </search>
