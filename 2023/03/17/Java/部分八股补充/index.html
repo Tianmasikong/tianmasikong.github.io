@@ -196,7 +196,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 17, 2023</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1363</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1628</span>
     </div>
   </div>
 </section>
@@ -224,6 +224,15 @@
 <p>​	Get和Post只是HTTP为了区分请求类型而设置的。也就是说，如果在get请求的request body中添加信息，在post请求的url中添加参数也是完全可以的。具体看浏览器和服务器的处理方式。部分浏览器会处理get请求中request body中的信息，但部分会直接把他舍弃掉。</p>
 <p><img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/17/bbdde87ec8a926a7.png" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" ></p>
 <p>​	Get请求中对数据长度的限制来源于服务器和浏览器的限制，业界不成文的规定是，（大多数）浏览器通常都会限制url长度在2K个字节，而（大多数）服务器最多处理64K大小的url。因此也就变相限制了get请求中数据长度。</p>
+<p>​	GET产生一个TCP数据包；POST产生两个TCP数据包。</p>
+<ul>
+<li><p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
+</li>
+<li><p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。</p>
+</li>
+</ul>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/guorui_java/article/details/112294323">https://blog.csdn.net/guorui_java/article/details/112294323</a></p>
+<p>​			<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/73475134">https://zhuanlan.zhihu.com/p/73475134</a></p>
 
       </section>
       <section class="extra">
