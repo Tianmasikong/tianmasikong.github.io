@@ -1391,6 +1391,10 @@
 <li>主库master校验完用户名，密码后，开始按照备库slave传过来的位置从本地读取binlog，发给slave。</li>
 <li>备库slave拿到binlog后写到本地文件，称为<strong>中转日志</strong>。SQL thread读取中转日志，解析出日志里的命令并执行。</li>
 </ol>
+<h2 id="JIT"><a href="#JIT" class="headerlink" title="JIT"></a>JIT</h2><h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>​	当JIT编译启用时，JVM读入.class文件解释后，<strong>将其发给JIT编译器</strong>，编译器将字节码编译成本机机器代码。</p>
+<p>​	通常javac将程序源代码编译后转换为字节码，JVM再解释字节码并编译成对应的机器指令，逐条读入并解释翻译，其执行速度必然会比可执行的二进制字节码程序慢。JIT就是为了<strong>提高执行速度</strong>而引入。   </p>
+<p>​	对于程序来说通常只有一部分代码被经常执行，应用的性能也取决于这些代码执行的速度，这些关键代码被称作为“<strong>热点代码</strong>”。在运行时JIT会把这些热点代码编译过的机器码保存起来以备下次使用。</p>
+<p>​	</p>
 ]]></content>
   </entry>
   <entry>
