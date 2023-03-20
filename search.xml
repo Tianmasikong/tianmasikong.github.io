@@ -1307,6 +1307,184 @@
 <h4 id="先写MySQL，再根据Binlog，异步更新Redis"><a href="#先写MySQL，再根据Binlog，异步更新Redis" class="headerlink" title="先写MySQL，再根据Binlog，异步更新Redis"></a>先写MySQL，再根据Binlog，异步更新Redis</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/72ef70228e4bd439.png"></p>
 <p>​	这种方案，主要是监听 MySQL 的 Binlog，然后通过异步的方式，将数据更新到 Redis，这种方案有个前提，查询的请求，不会回写 Redis。</p>
 <p>参考：<a href="https://blog.csdn.net/weixin_70730532/article/details/125870478">https://blog.csdn.net/weixin_70730532/article/details/125870478</a></p>
-<h2 id="MySQL的分库分表"><a href="#MySQL的分库分表" class="headerlink" title="MySQL的分库分表"></a>MySQL的分库分表</h2>]]></content>
+<h2 id="MySQL的分库分表"><a href="#MySQL的分库分表" class="headerlink" title="MySQL的分库分表"></a>MySQL的分库分表</h2><p>​	使用单数据库存储存在以下的性能瓶颈：</p>
+<ol>
+<li>IO瓶颈：热点数据太多，产生大量磁盘IO，降低效率。请求数据太多，带宽不够，网络IO瓶颈</li>
+<li>CPU瓶颈：排序、分组、连接查询会消耗大量的CPU资源，请求数太多，CPU出现瓶颈。</li>
+</ol>
+<p>​	因此考虑对数据库进行分库分表操作，分库分表主要有两种实现方式，<strong>水平拆分</strong>和<strong>垂直拆分</strong>。</p>
+<h3 id="垂直拆分"><a href="#垂直拆分" class="headerlink" title="垂直拆分"></a>垂直拆分</h3><h4 id="数据库垂直拆分"><a href="#数据库垂直拆分" class="headerlink" title="数据库垂直拆分"></a>数据库垂直拆分</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/18fbd18ca79abc7b.jpg"></p>
+<p>​	根据具体业务将全库拆分为多个特定库，如将电商系统拆分为订单库、会员库和商品库等</p>
+<h4 id="表垂直拆分"><a href="#表垂直拆分" class="headerlink" title="表垂直拆分"></a>表垂直拆分</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/c8e5fbec39a92f06.jpg"></p>
+<p>​	根据业务区拆分表，如把user表拆为user_base表和user_info表</p>
+<h4 id="垂直拆分特点"><a href="#垂直拆分特点" class="headerlink" title="垂直拆分特点"></a>垂直拆分特点</h4><ol>
+<li>每个库（表）的结构都不一样</li>
+<li>每个库（表）的数据都不一样</li>
+<li>每个库（表）的并集是全量数据</li>
+</ol>
+<h4 id="垂直拆分优缺点"><a href="#垂直拆分优缺点" class="headerlink" title="垂直拆分优缺点"></a>垂直拆分优缺点</h4><p>优点：</p>
+<ol>
+<li>拆分后业务清晰，专库专用按业务拆分</li>
+<li>数据维护简单，按业务不同放到不同机器上</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>如果单表数据量大，仍然会导致读写压力大</li>
+<li>一个业务往往会影响到数据库的瓶颈</li>
+</ol>
+<h3 id="水平拆分"><a href="#水平拆分" class="headerlink" title="水平拆分"></a>水平拆分</h3><h4 id="数据库水平拆分"><a href="#数据库水平拆分" class="headerlink" title="数据库水平拆分"></a>数据库水平拆分</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/f47ebc0c92b434eb.jpg"></p>
+<p>​	比如把一个会员表中，userId % 2 &#x3D;&#x3D; 0 的放到一个库中，另外的放到另一个库中，将会员库拆分为会员1库和会员2库</p>
+<h4 id="表水平拆分"><a href="#表水平拆分" class="headerlink" title="表水平拆分"></a>表水平拆分</h4><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/0586b72bc51b8c34.jpg"></p>
+<p>​	把User表拆分为1表和2表，根据id进行拆分</p>
+<h4 id="水平拆分特点"><a href="#水平拆分特点" class="headerlink" title="水平拆分特点"></a>水平拆分特点</h4><p>1.每个库（表）的结构都一样<br>2.每个库（表）的数据都不一样<br>3.每个库（表）的并集是全量数据</p>
+<h4 id="水平拆分优缺点"><a href="#水平拆分优缺点" class="headerlink" title="水平拆分优缺点"></a>水平拆分优缺点</h4><p>优点</p>
+<ol>
+<li>单库单表数据量减少，提升性能</li>
+<li>提高了系统的稳定性和负载能力</li>
+<li>拆分表的结构相同，程序改造较少</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>数据的扩容维护量大</li>
+<li>很难抽象出具体的拆分规则</li>
+</ol>
+<p>参考：<a href="https://blog.csdn.net/ahuangqingfeng/article/details/124161107">https://blog.csdn.net/ahuangqingfeng/article/details/124161107</a></p>
+<h2 id="Sychronized锁升级"><a href="#Sychronized锁升级" class="headerlink" title="Sychronized锁升级"></a>Sychronized锁升级</h2><p>​	加锁可以使一段代码在同一时间只有一个线程可以访问，在增加安全性的同时，牺牲了程序的执行性能，为了在一定程度上减少获得锁和释放锁带来的性能消耗，在jdk6后引入了“偏向锁”和“轻量级锁”。</p>
+<p>​	所以共有四种锁状态，级别由低到高依次为：<strong>无锁状态、偏向锁状态、轻量级锁状态、重量级锁状态</strong>。这几个状态会随着竞争情况逐渐升级。</p>
+<p>​	<strong>锁可以升级但不能降级。</strong></p>
+<h3 id="无锁"><a href="#无锁" class="headerlink" title="无锁"></a>无锁</h3><p>​	无锁是指没有对资源进行锁定，所有的线程都能访问并修改同一个资源，但<strong>同时只能有一个线程能修改成功</strong>。</p>
+<p>​	无锁的特点是修改操作会在循环内进行，线程会<strong>不断的尝试修改共享资源</strong>，如果没有冲突就修改成功并退出，否则就会<strong>继续循环尝试</strong>。</p>
+<p>​	如果有多个线程修改同一个值，则必定会有一个线程能够修改成功，其他的线程会不断重试直到修改成功。</p>
+<p>​	和乐观锁有点像。</p>
+<h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>​	当一段同步代码一直被同一个线程所访问时，即不存在多个线程的竞争时，那么该线程<strong>在后续访问时便会自动获得锁</strong>，从而<strong>降低获取锁带来的消耗</strong>，即提高性能。</p>
+<p>​	线程<strong>不会主动释放偏向锁</strong>，只有<strong>遇到其他线程尝试竞争偏向锁时</strong>，持有偏向锁的线程才会释放锁。</p>
+<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><p>​	一旦出现两个线程同时获取一把锁的情况，偏向锁便不再合适，会升级为轻量锁，没有获取到锁的线程并不会进入阻塞状态，而是会进入“自旋”，其实就是进入循环，循环内会尝试继续获取锁。</p>
+<h3 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h3><p>​	当有一个线程获取锁之后，其余所有等待获取该锁的线程都会处于阻塞状态。</p>
+<h3 id="锁升级状态"><a href="#锁升级状态" class="headerlink" title="锁升级状态"></a>锁升级状态</h3><p>所以，锁升级有两条线路：</p>
+<ul>
+<li>偏向锁打开的情况下，当对象被new出来，此时是无锁，当第一个线程来访问并获取锁的时候，加一个偏向锁，如果在第一个线程持有偏向锁期间，有其他的线程也来获取锁，那么此时升级为轻量级锁，如果竞争比较激烈，比如自旋的线程尝试多次仍旧获取不到锁，就有可能升级为重量级锁。也就是无锁→偏向锁→轻量级锁→重量级锁</li>
+<li>偏向锁关闭的情况下，当对象被new出来，此时是无锁，当第一个线程来访问，直接就加轻量级锁，如果竞争比较激烈，比如自旋的线程尝试多次仍旧获取不到锁，就有可能升级为重量级锁。也就是无锁→轻量级锁→重量级锁</li>
+</ul>
+<p>参考：<a href="https://blog.csdn.net/zhemeban/article/details/120950689">https://blog.csdn.net/zhemeban/article/details/120950689</a></p>
+<h2 id="MySQL是如何保证主从一致性的"><a href="#MySQL是如何保证主从一致性的" class="headerlink" title="MySQL是如何保证主从一致性的"></a>MySQL是如何保证主从一致性的</h2><p>​	MySQL通过<strong>主从复制</strong>过程保证主从数据的一致性，在主库<strong>开启Binlog功能</strong>，这样主库就可以把Binlog传递给从库，从库拿到Binlog后实现数据恢复达到主从数据一致性。</p>
+<p>Binlog文件有以下三种模式：</p>
+<ul>
+<li><strong>statement格式</strong>：<ul>
+<li>在该格式下binlog文件会对数据库中执行的每一条原始修改语句进行记录</li>
+</ul>
+</li>
+<li><strong>row格式</strong>：<ul>
+<li>不记录SQL语句上下文信息，仅保存哪条记录被修改</li>
+<li>当binlog使用row格式的时候，binlog中记录了语句中具体的数量值，比如delete操作会记录真实删除行的主键id</li>
+</ul>
+</li>
+<li><strong>mixed格式</strong>：<ul>
+<li>两种格式的综合体，由数据库引擎决定是使用哪个格式进行存储</li>
+</ul>
+</li>
+</ul>
+<p>参考：<a href="https://blog.csdn.net/qq_48157004/article/details/127624329">https://blog.csdn.net/qq_48157004/article/details/127624329</a></p>
+<h2 id="MySQL是怎样进行主从复制的？"><a href="#MySQL是怎样进行主从复制的？" class="headerlink" title="MySQL是怎样进行主从复制的？"></a>MySQL是怎样进行主从复制的？</h2><p><img src="https://s3.bmp.ovh/imgs/2023/03/17/675b709d4bee0e29.png"></p>
+<ol>
+<li>在备库slave上通过<strong>change master</strong>命令，设置主库master的IP，用户名等信息，以及要从哪个位置开始请求binlog，这个位置包含文件名和日志偏移量。</li>
+<li>在备库slave上执行<strong>start slave</strong>命令，备库会启动两个线程，也就是 IO thread和SQL thread，其中IO thread负责与主库建立连接。</li>
+<li>主库master校验完用户名，密码后，开始按照备库slave传过来的位置从本地读取binlog，发给slave。</li>
+<li>备库slave拿到binlog后写到本地文件，称为<strong>中转日志</strong>。SQL thread读取中转日志，解析出日志里的命令并执行。</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>设计模式</title>
+    <url>/2023/03/20/Java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><u><em><strong>设计模式是我写在简历上并加粗的内容，所以要好好看并挖的深一些</strong></em></u></p>
+<h1 id="1-什么是设计模式"><a href="#1-什么是设计模式" class="headerlink" title="1.什么是设计模式"></a>1.什么是设计模式</h1><p>​	设计模式就是一套<strong>被反复使用</strong>，<strong>被多数人知晓的</strong>，<strong>经过分类编目的代码设计经验</strong>的总结。使用设计模式是为了可重用代码、让代码更加容易被他人理解、保证代码可靠性和程序的重用性。</p>
+<h1 id="2-为什么要学习设计模式"><a href="#2-为什么要学习设计模式" class="headerlink" title="2.为什么要学习设计模式"></a>2.为什么要学习设计模式</h1><ul>
+<li>看懂源代码：jdk和Spring的源码中用了很多的设计模式</li>
+<li>看懂他人的代码：当接手他人的项目时让自己可以看懂前任的代码</li>
+<li>方便程序员之间交流：和同事交流的时候，同事说这个地方我们可以用个策略模式，就可以免于阐述过多的设计细节</li>
+<li>编写理想中的好代码</li>
+</ul>
+<h1 id="3-设计模式分类"><a href="#3-设计模式分类" class="headerlink" title="3.设计模式分类"></a>3.设计模式分类</h1><ul>
+<li><strong>创建型模式</strong>：简单工厂模式，工厂方法模式，抽象工厂模式，单例模式，原型模式。</li>
+<li><strong>结构型模式</strong>：装饰器模式，代理模式</li>
+<li><strong>行为型模式</strong>：策略模式，观察者模式</li>
+</ul>
+<h1 id="4-设计模式的六大原则"><a href="#4-设计模式的六大原则" class="headerlink" title="4.设计模式的六大原则"></a>4.设计模式的六大原则</h1><ul>
+<li>里氏替换原则</li>
+<li>迪米特法则</li>
+<li>单一职责原则</li>
+<li>开闭原则</li>
+<li>依赖倒置原则</li>
+<li>接口隔离原则</li>
+</ul>
+<h1 id="5-创建型模式"><a href="#5-创建型模式" class="headerlink" title="5.创建型模式"></a>5.创建型模式</h1><h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>​	单例模式保证了一个类只有一个实例，并且提供一个访问该全局实例的方法</p>
+<h3 id="哪些地方使用了单例模式"><a href="#哪些地方使用了单例模式" class="headerlink" title="哪些地方使用了单例模式"></a>哪些地方使用了单例模式</h3><ol>
+<li>网站的计数器，保证计数器的同步</li>
+<li>多线程的线程池，便于对池中是线程进行控制</li>
+<li>Windows的任务管理器和回收站</li>
+</ol>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
+<ol>
+<li>对单例类的所有实例化得到的都是相同的一个对象，这样就可以防止其他对象对自己的实例化，<strong>确保所有的对象都访问同一个实例</strong>。</li>
+<li>由于在内存中只存在一个对象，因此可以<strong>节约系统资源</strong></li>
+<li>避免对共享资源的多重占用</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>不适应变化的对象，如果同一类型的对象要在不同的用例场景发送变化，<strong>单例就会出现并发性错误</strong>。（最经典的就是bean）</li>
+<li>由于单例中没有抽象层，因此<strong>对单例类的扩展有很大的困难</strong></li>
+<li>单例类的职责过重，一定程度上<strong>违背了单一职责原则</strong></li>
+</ol>
+<h3 id="初始化方式"><a href="#初始化方式" class="headerlink" title="初始化方式"></a>初始化方式</h3><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span>  <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span> &#123;<br>    <br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> Singleton uniqueInstance;<br>    <br>	<span class="hljs-keyword">private</span> <span class="hljs-title function_">Singleton</span><span class="hljs-params">()</span>&#123;<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title function_">getUniqueInstance</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">if</span>(uniqueInstance == <span class="hljs-literal">null</span>)&#123;<br>            <br>            <span class="hljs-keyword">synchronized</span>(Singleton.class)&#123;<br>                <span class="hljs-keyword">if</span>(uniqueInstance == <span class="hljs-literal">null</span>)<br>                    uniqueInstance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Singleton</span>();<br>            &#125;<br>        &#125;    <br>        <span class="hljs-keyword">return</span> uniqueInstance;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>​	工厂模式提供了一种创建对象的方式。在工厂模式中，我们在创建对象时<strong>不会对客户端暴露创建逻辑</strong>，并且是通过使用一个共同的接口来指向新创建的对象。实现了创建者和调用者分离。</p>
+<p>​	工厂模式分为<strong>简单工厂</strong>、<strong>工厂方法</strong>和<strong>抽象工厂</strong>。</p>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li>工厂模式可以降低程序的耦合性，便于后续的维护扩展</li>
+</ul>
+<h3 id="Spring中的工厂模式"><a href="#Spring中的工厂模式" class="headerlink" title="Spring中的工厂模式"></a>Spring中的工厂模式</h3><p>​	Spring IOC容器在创建bean的时候就是使用了工厂模式，无论是通过xml配置还是通过注解，<strong>大部分都是通过简单工厂模式来创建</strong>的。</p>
+<p>​	当容器拿到了beanName和class类型后，将会动态的通过反射创建具体的某个对象，然后将创建的对象放到Map中。</p>
+<p>​	Spring通过工厂模式极大的降级了代码中的耦合性，同时在三层架构模型，也就是Controller,Service,Dao三层模式中，如果不使用工厂模式就要直接new对象，代码重复量和耦合度很高。</p>
+<p>​	如果使用工厂模式，Spring写一个工厂，由工厂创建Bean，以后如果我们需要对象就直接向工厂要就可以。同时IOC容器的工厂中有个静态的Map集合，在这里也使用了<strong>单例模式</strong>，即不会重复创建实例影响程序效率。</p>
+<p>​	<strong><u>tips：bean同样存在prototype、request等 作用域，只是默认使用的单例。</u></strong></p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>​	工厂中有许多商品，客户只需要提供一个参数给工厂，工厂就可以根据这个参数生产出对应的产品来给与客户。</p>
+<p>​	单类的职责过重，增加新产品时会违背“开闭原则”</p>
+<p>​	<strong>特点是就一个工厂类。</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CarFactory</span> &#123;<br>	<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> car <span class="hljs-title function_">createCar</span><span class="hljs-params">(String name)</span>&#123;<br>        <span class="hljs-type">Car</span> <span class="hljs-variable">car</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;奥迪&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDi</span>();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;宝马&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMa</span>();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;大众&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaZhong</span>();<br>        <br>        <span class="hljs-keyword">return</span> car<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>​	定义一个创建产品对象的工厂接口，让工厂子类来决定实例化哪一个产品类。</p>
+<p>​	可以使系统在不修改原来代码的情况下引进新的产品，即<strong>满足开闭原则</strong>。</p>
+<p>​	缺点是：每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，这增加了系统的<strong>复杂度</strong>。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//工厂抽象类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">interface</span> CarFactory&#123;<br>    <br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体工厂类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AoDiFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDi</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaoMaFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMa</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>​	当需要新增产品时，普通工厂模式需要再实现一个产品类，长此以往就会产生非常多的实现类。</p>
+<p>​	抽象工厂模式的具体工厂子类不只是产生一件产品，而是生产一个产品族，大大减少了具体类的数量。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//工厂抽象类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">interface</span> CarFactory&#123;<br>    <br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>;<br>    <br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体工厂类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AoDiFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDiEngine</span>();<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDiGlass</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaoMaFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMaEngine</span>();<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMaGlass</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><p>​	原型模式简单来说就是<strong>克隆</strong>。</p>
+<p>​	原型表明了<strong>有一个样板实例</strong>，程序<strong>根据这个样本来创建新的实例</strong>。</p>
+<p>​	<strong>多用于创建复杂和构造耗时的实例</strong>，在这种情况下复制一个已经存在的实例可以<strong>使得程序运行更加高效</strong>。</p>
+<p>​	如果需要进行<strong>保护性拷贝</strong>，即不希望函数副作用，就可以考虑使用原型模式拷贝多个对象供调用者使用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Cloneable</span>&#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> String password;<br>    <br>    <span class="hljs-keyword">protected</span> User <span class="hljs-title function_">clone</span><span class="hljs-params">()</span>&#123;<br>     	<span class="hljs-keyword">try</span>&#123;<br>            <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> (User) <span class="hljs-built_in">super</span>.clone();<br>            <span class="hljs-comment">//深拷贝，此时这两个user中的password指向的是同一个对象</span><br>            user.password = <span class="hljs-built_in">this</span>.password.clone();<br>            <span class="hljs-comment">//对name就是浅拷贝，两个user对象的name是不同的对象</span><br>            <br>        &#125; <span class="hljs-keyword">catch</span>(Exception e)&#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="6-结构型模式"><a href="#6-结构型模式" class="headerlink" title="6.结构型模式"></a>6.结构型模式</h1><h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><p>​	在软件开发过程中，有时想用一些现存的组件。这些组件可能只是完成了一些核心功能。但<strong>在不改变其结构的情况下</strong>，可以<strong>动态地扩展其功能</strong>。所有这些都可以釆用装饰器模式来实现。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DecoratorPattern</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Component</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcreteComponent</span>();<br>        p.operation();<br>        System.out.println(<span class="hljs-string">&quot;---------------------------------&quot;</span>);<br>        <span class="hljs-type">Component</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcreteDecorator</span>(p);<br>        d.operation();<br>    &#125;<br>&#125;<br><span class="hljs-comment">//抽象构件角色</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体构件角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ConcreteComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcreteComponent</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;创建具体构件角色&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;调用具体构件角色的方法operation()&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">//抽象装饰角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Decorator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">private</span> Component component;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Decorator</span><span class="hljs-params">(Component component)</span> &#123;<br>        <span class="hljs-built_in">this</span>.component = component;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        component.operation();<br>    &#125;<br>&#125;<br><span class="hljs-comment">//具体装饰角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ConcreteDecorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Decorator</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcreteDecorator</span><span class="hljs-params">(Component component)</span> &#123;<br>        <span class="hljs-built_in">super</span>(component);<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-built_in">super</span>.operation();<br>        addedFunction();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addedFunction</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;为具体构件角色增加额外的功能addedFunction()&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>参考:<a href="https://zhuanlan.zhihu.com/p/444298983">https://zhuanlan.zhihu.com/p/444298983</a></p>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>​	代理模式就是<strong>代理对象</strong>具备真实对象的功能，并代替真实对象完成相应的操作，并能够在操作执行的前后<strong>对操作进行增强处理</strong>。</p>
+<p><a href="https://blog.csdn.net/weixin_43953283/article/details/125783249">https://blog.csdn.net/weixin_43953283/article/details/125783249</a></p>
+<h1 id="7-行为型模式"><a href="#7-行为型模式" class="headerlink" title="7.行为型模式"></a>7.行为型模式</h1><h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>​	策略模式是一种行为型模式，它将对象和行为分开，将行为定义为 <code>一个行为接口</code> 和 <code>具体行为的实现</code>。策略模式最大的特点是行为的变化，行为之间可以相互替换。每个if判断都可以理解为就是一个策略。本模式使得算法可独立于使用它的用户而变化</p>
+<p><a href="https://blog.csdn.net/qq_54773252/article/details/121032404">https://blog.csdn.net/qq_54773252/article/details/121032404</a></p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>​	定义了一种 1对多 的依赖关系, 让多个观察者对象同时监听1个主题对象。这个主题对象在状态发生变化时, 会通知所有的观察者对象, 使它们能够同时更新自己.</p>
+<p><a href="https://blog.csdn.net/nvd11/article/details/42302559">https://blog.csdn.net/nvd11/article/details/42302559</a></p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>设计模式</tag>
+        <tag>Java</tag>
+      </tags>
   </entry>
 </search>

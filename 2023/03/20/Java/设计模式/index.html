@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>设计模式 - Tianma&#39;s Blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content=", 学习、Java">
+  <meta name="description" content="设计模式是我写在简历上并加粗的内容，所以要好好看并挖的...">
+  <meta name="author" content="Tianma">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="https://at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: true
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '我在开了灯的床头下，想问问自己的心啊。',
+          typing: true,
+          api: 'https://v2.jinrishici.com/one.json',
+          data_contents: '["data","content"]'
+        },
+      },
+      qrcode: {
+        enable: false,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: '/search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">设计模式</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives/ " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags/ " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories/ " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/friend/ " class="underline "> 友链</a>
+      </li><li class="menu-item">
+        <a href="/about/ " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="https://s3.bmp.ovh/imgs/2023/03/10/99f286db44e77168.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">设计模式</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>March 20, 2023</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>6104</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <p><u><em><strong>设计模式是我写在简历上并加粗的内容，所以要好好看并挖的深一些</strong></em></u></p>
+<h1 id="1-什么是设计模式"><a href="#1-什么是设计模式" class="headerlink" title="1.什么是设计模式"></a>1.什么是设计模式</h1><p>​	设计模式就是一套<strong>被反复使用</strong>，<strong>被多数人知晓的</strong>，<strong>经过分类编目的代码设计经验</strong>的总结。使用设计模式是为了可重用代码、让代码更加容易被他人理解、保证代码可靠性和程序的重用性。</p>
+<h1 id="2-为什么要学习设计模式"><a href="#2-为什么要学习设计模式" class="headerlink" title="2.为什么要学习设计模式"></a>2.为什么要学习设计模式</h1><ul>
+<li>看懂源代码：jdk和Spring的源码中用了很多的设计模式</li>
+<li>看懂他人的代码：当接手他人的项目时让自己可以看懂前任的代码</li>
+<li>方便程序员之间交流：和同事交流的时候，同事说这个地方我们可以用个策略模式，就可以免于阐述过多的设计细节</li>
+<li>编写理想中的好代码</li>
+</ul>
+<h1 id="3-设计模式分类"><a href="#3-设计模式分类" class="headerlink" title="3.设计模式分类"></a>3.设计模式分类</h1><ul>
+<li><strong>创建型模式</strong>：简单工厂模式，工厂方法模式，抽象工厂模式，单例模式，原型模式。</li>
+<li><strong>结构型模式</strong>：装饰器模式，代理模式</li>
+<li><strong>行为型模式</strong>：策略模式，观察者模式</li>
+</ul>
+<h1 id="4-设计模式的六大原则"><a href="#4-设计模式的六大原则" class="headerlink" title="4.设计模式的六大原则"></a>4.设计模式的六大原则</h1><ul>
+<li>里氏替换原则</li>
+<li>迪米特法则</li>
+<li>单一职责原则</li>
+<li>开闭原则</li>
+<li>依赖倒置原则</li>
+<li>接口隔离原则</li>
+</ul>
+<h1 id="5-创建型模式"><a href="#5-创建型模式" class="headerlink" title="5.创建型模式"></a>5.创建型模式</h1><h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>​	单例模式保证了一个类只有一个实例，并且提供一个访问该全局实例的方法</p>
+<h3 id="哪些地方使用了单例模式"><a href="#哪些地方使用了单例模式" class="headerlink" title="哪些地方使用了单例模式"></a>哪些地方使用了单例模式</h3><ol>
+<li>网站的计数器，保证计数器的同步</li>
+<li>多线程的线程池，便于对池中是线程进行控制</li>
+<li>Windows的任务管理器和回收站</li>
+</ol>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
+<ol>
+<li>对单例类的所有实例化得到的都是相同的一个对象，这样就可以防止其他对象对自己的实例化，<strong>确保所有的对象都访问同一个实例</strong>。</li>
+<li>由于在内存中只存在一个对象，因此可以<strong>节约系统资源</strong></li>
+<li>避免对共享资源的多重占用</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>不适应变化的对象，如果同一类型的对象要在不同的用例场景发送变化，<strong>单例就会出现并发性错误</strong>。（最经典的就是bean）</li>
+<li>由于单例中没有抽象层，因此<strong>对单例类的扩展有很大的困难</strong></li>
+<li>单例类的职责过重，一定程度上<strong>违背了单一职责原则</strong></li>
+</ol>
+<h3 id="初始化方式"><a href="#初始化方式" class="headerlink" title="初始化方式"></a>初始化方式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span>  <span class="hljs-keyword">class</span> <span class="hljs-title class_">Singleton</span> &#123;<br>    <br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> Singleton uniqueInstance;<br>    <br>	<span class="hljs-keyword">private</span> <span class="hljs-title function_">Singleton</span><span class="hljs-params">()</span>&#123;<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title function_">getUniqueInstance</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">if</span>(uniqueInstance == <span class="hljs-literal">null</span>)&#123;<br>            <br>            <span class="hljs-keyword">synchronized</span>(Singleton.class)&#123;<br>                <span class="hljs-keyword">if</span>(uniqueInstance == <span class="hljs-literal">null</span>)<br>                    uniqueInstance = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Singleton</span>();<br>            &#125;<br>        &#125;    <br>        <span class="hljs-keyword">return</span> uniqueInstance;<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><p>​	工厂模式提供了一种创建对象的方式。在工厂模式中，我们在创建对象时<strong>不会对客户端暴露创建逻辑</strong>，并且是通过使用一个共同的接口来指向新创建的对象。实现了创建者和调用者分离。</p>
+<p>​	工厂模式分为<strong>简单工厂</strong>、<strong>工厂方法</strong>和<strong>抽象工厂</strong>。</p>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li>工厂模式可以降低程序的耦合性，便于后续的维护扩展</li>
+</ul>
+<h3 id="Spring中的工厂模式"><a href="#Spring中的工厂模式" class="headerlink" title="Spring中的工厂模式"></a>Spring中的工厂模式</h3><p>​	Spring IOC容器在创建bean的时候就是使用了工厂模式，无论是通过xml配置还是通过注解，<strong>大部分都是通过简单工厂模式来创建</strong>的。</p>
+<p>​	当容器拿到了beanName和class类型后，将会动态的通过反射创建具体的某个对象，然后将创建的对象放到Map中。</p>
+<p>​	Spring通过工厂模式极大的降级了代码中的耦合性，同时在三层架构模型，也就是Controller,Service,Dao三层模式中，如果不使用工厂模式就要直接new对象，代码重复量和耦合度很高。</p>
+<p>​	如果使用工厂模式，Spring写一个工厂，由工厂创建Bean，以后如果我们需要对象就直接向工厂要就可以。同时IOC容器的工厂中有个静态的Map集合，在这里也使用了<strong>单例模式</strong>，即不会重复创建实例影响程序效率。</p>
+<p>​	<strong><u>tips：bean同样存在prototype、request等 作用域，只是默认使用的单例。</u></strong></p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>​	工厂中有许多商品，客户只需要提供一个参数给工厂，工厂就可以根据这个参数生产出对应的产品来给与客户。</p>
+<p>​	单类的职责过重，增加新产品时会违背“开闭原则”</p>
+<p>​	<strong>特点是就一个工厂类。</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CarFactory</span> &#123;<br>	<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> car <span class="hljs-title function_">createCar</span><span class="hljs-params">(String name)</span>&#123;<br>        <span class="hljs-type">Car</span> <span class="hljs-variable">car</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br>        <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;奥迪&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDi</span>();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;宝马&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMa</span>();<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(name.equals(<span class="hljs-string">&quot;大众&quot;</span>))car = <span class="hljs-keyword">new</span> <span class="hljs-title class_">DaZhong</span>();<br>        <br>        <span class="hljs-keyword">return</span> car<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>​	定义一个创建产品对象的工厂接口，让工厂子类来决定实例化哪一个产品类。</p>
+<p>​	可以使系统在不修改原来代码的情况下引进新的产品，即<strong>满足开闭原则</strong>。</p>
+<p>​	缺点是：每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，这增加了系统的<strong>复杂度</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//工厂抽象类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">interface</span> CarFactory&#123;<br>    <br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体工厂类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AoDiFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDi</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaoMaFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Car <span class="hljs-title function_">createCar</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMa</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>​	当需要新增产品时，普通工厂模式需要再实现一个产品类，长此以往就会产生非常多的实现类。</p>
+<p>​	抽象工厂模式的具体工厂子类不只是产生一件产品，而是生产一个产品族，大大减少了具体类的数量。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//工厂抽象类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">interface</span> CarFactory&#123;<br>    <br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>;<br>    <br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体工厂类</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AoDiFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDiEngine</span>();<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AoDiGlass</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">BaoMaFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">CarFactory</span>&#123;<br>    <br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Engine <span class="hljs-title function_">createEngine</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMaEngine</span>();<br>    &#125;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> Glass <span class="hljs-title function_">createGlass</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BaoMaGlass</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><p>​	原型模式简单来说就是<strong>克隆</strong>。</p>
+<p>​	原型表明了<strong>有一个样板实例</strong>，程序<strong>根据这个样本来创建新的实例</strong>。</p>
+<p>​	<strong>多用于创建复杂和构造耗时的实例</strong>，在这种情况下复制一个已经存在的实例可以<strong>使得程序运行更加高效</strong>。</p>
+<p>​	如果需要进行<strong>保护性拷贝</strong>，即不希望函数副作用，就可以考虑使用原型模式拷贝多个对象供调用者使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Cloneable</span>&#123;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> String password;<br>    <br>    <span class="hljs-keyword">protected</span> User <span class="hljs-title function_">clone</span><span class="hljs-params">()</span>&#123;<br>     	<span class="hljs-keyword">try</span>&#123;<br>            <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> (User) <span class="hljs-built_in">super</span>.clone();<br>            <span class="hljs-comment">//深拷贝，此时这两个user中的password指向的是同一个对象</span><br>            user.password = <span class="hljs-built_in">this</span>.password.clone();<br>            <span class="hljs-comment">//对name就是浅拷贝，两个user对象的name是不同的对象</span><br>            <br>        &#125; <span class="hljs-keyword">catch</span>(Exception e)&#123;<br>            e.printStackTrace();<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="6-结构型模式"><a href="#6-结构型模式" class="headerlink" title="6.结构型模式"></a>6.结构型模式</h1><h2 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h2><p>​	在软件开发过程中，有时想用一些现存的组件。这些组件可能只是完成了一些核心功能。但<strong>在不改变其结构的情况下</strong>，可以<strong>动态地扩展其功能</strong>。所有这些都可以釆用装饰器模式来实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DecoratorPattern</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">Component</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcreteComponent</span>();<br>        p.operation();<br>        System.out.println(<span class="hljs-string">&quot;---------------------------------&quot;</span>);<br>        <span class="hljs-type">Component</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ConcreteDecorator</span>(p);<br>        d.operation();<br>    &#125;<br>&#125;<br><span class="hljs-comment">//抽象构件角色</span><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span>;<br>&#125;<br><span class="hljs-comment">//具体构件角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ConcreteComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcreteComponent</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;创建具体构件角色&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;调用具体构件角色的方法operation()&quot;</span>);<br>    &#125;<br>&#125;<br><span class="hljs-comment">//抽象装饰角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Decorator</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Component</span> &#123;<br>    <span class="hljs-keyword">private</span> Component component;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">Decorator</span><span class="hljs-params">(Component component)</span> &#123;<br>        <span class="hljs-built_in">this</span>.component = component;<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        component.operation();<br>    &#125;<br>&#125;<br><span class="hljs-comment">//具体装饰角色</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ConcreteDecorator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">Decorator</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">ConcreteDecorator</span><span class="hljs-params">(Component component)</span> &#123;<br>        <span class="hljs-built_in">super</span>(component);<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">operation</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-built_in">super</span>.operation();<br>        addedFunction();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">addedFunction</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;为具体构件角色增加额外的功能addedFunction()&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/444298983">https://zhuanlan.zhihu.com/p/444298983</a></p>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><p>​	代理模式就是<strong>代理对象</strong>具备真实对象的功能，并代替真实对象完成相应的操作，并能够在操作执行的前后<strong>对操作进行增强处理</strong>。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43953283/article/details/125783249">https://blog.csdn.net/weixin_43953283/article/details/125783249</a></p>
+<h1 id="7-行为型模式"><a href="#7-行为型模式" class="headerlink" title="7.行为型模式"></a>7.行为型模式</h1><h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><p>​	策略模式是一种行为型模式，它将对象和行为分开，将行为定义为 <code>一个行为接口</code> 和 <code>具体行为的实现</code>。策略模式最大的特点是行为的变化，行为之间可以相互替换。每个if判断都可以理解为就是一个策略。本模式使得算法可独立于使用它的用户而变化</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_54773252/article/details/121032404">https://blog.csdn.net/qq_54773252/article/details/121032404</a></p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><p>​	定义了一种 1对多 的依赖关系, 让多个观察者对象同时监听1个主题对象。这个主题对象在状态发生变化时, 会通知所有的观察者对象, 使它们能够同时更新自己.</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/nvd11/article/details/42302559">https://blog.csdn.net/nvd11/article/details/42302559</a></p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Tianma</li>
+    <li><strong>本文链接：</strong><a href="https://tianmasikong.github.io/2023/03/20/Java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/index.html" title="https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;20&#x2F;Java&#x2F;%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F&#x2F;index.html">https:&#x2F;&#x2F;tianmasikong.github.io&#x2F;2023&#x2F;03&#x2F;20&#x2F;Java&#x2F;%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2023/03/17/Java/%E9%83%A8%E5%88%86%E5%85%AB%E8%82%A1%E8%A1%A5%E5%85%85/">部分八股补充<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<div id="valine"></div>
+<script defer src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script>
+  window.onload = function () {
+    var loadValine = function () {
+      new Valine({
+        el: '#valine',
+        app_id: "fkPePQUNWiO6xtRKi0gdbZjd-gzGzoHsz",
+        app_key: "9sFPEJhzPljkPR7psR9ryP5s",
+        placeholder: "雁过留痕",
+        avatar: "mp",
+        pageSize: "10",
+        lang: "zh-CN",
+      });
+    }
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        loadValine();
+      });
+    } else {
+      loadValine();
+    }
+  };
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.什么是设计模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%A6%E4%B9%A0%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">2.为什么要学习设计模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="toc-text">3.设计模式分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%85%AD%E5%A4%A7%E5%8E%9F%E5%88%99"><span class="toc-text">4.设计模式的六大原则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">5.创建型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">单例模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E5%9C%B0%E6%96%B9%E4%BD%BF%E7%94%A8%E4%BA%86%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">哪些地方使用了单例模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%96%B9%E5%BC%8F"><span class="toc-text">初始化方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-text">工厂模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%BD%E5%A4%84"><span class="toc-text">好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E4%B8%AD%E7%9A%84%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-text">Spring中的工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-text">简单工厂模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="toc-text">工厂方法模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-text">抽象工厂模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">原型模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">6.结构型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-text">装饰器模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="toc-text">代理模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-%E8%A1%8C%E4%B8%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">7.行为型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text">策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="toc-text">观察者模式</span></a></li></ol></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=210583478 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://github.com/tianmasikong "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:210583478@qq.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/assets/haru02.model.json"},"display":{"superSample":2,"width":200,"height":400,"position":"right","hOffset":0,"vOffset":-30},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.8},"dialog":{"enable":true,"hitokoto":true},"log":false});</script></body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
