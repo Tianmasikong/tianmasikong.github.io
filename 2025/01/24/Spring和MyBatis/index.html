@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Spring和MyBatis | 天马司空的博客</title><meta name="author" content="天马司空"><meta name="copyright" content="天马司空"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="学Java哪有不疯的，哈哈 SpringIoC 控制反转是一种设计思想。就是将原本在程序中手动创建对象的控制权交由Spring框架来管理。最直接的体现就是不用去new一个对象了，而是由Spring容器来管理一个叫bean的东西，控制它的整个生命周期。Spring通过Java的反射机制来实现对其他对象的控制，包括初始化、创建、销毁等，解放手动创建对象的过程，同时降低类之间的耦合度。 IoC的好处 资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring和MyBatis">
+<meta property="og:url" content="http://example.com/2025/01/24/Spring%E5%92%8CMyBatis/index.html">
+<meta property="og:site_name" content="天马司空的博客">
+<meta property="og:description" content="学Java哪有不疯的，哈哈 SpringIoC 控制反转是一种设计思想。就是将原本在程序中手动创建对象的控制权交由Spring框架来管理。最直接的体现就是不用去new一个对象了，而是由Spring容器来管理一个叫bean的东西，控制它的整个生命周期。Spring通过Java的反射机制来实现对其他对象的控制，包括初始化、创建、销毁等，解放手动创建对象的过程，同时降低类之间的耦合度。 IoC的好处 资">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/head.gif">
+<meta property="article:published_time" content="2025-01-24T13:13:09.000Z">
+<meta property="article:modified_time" content="2025-01-24T13:13:30.202Z">
+<meta property="article:author" content="天马司空">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/head.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Spring和MyBatis",
+  "url": "http://example.com/2025/01/24/Spring%E5%92%8CMyBatis/",
+  "image": "http://example.com/img/head.gif",
+  "datePublished": "2025-01-24T13:13:09.000Z",
+  "dateModified": "2025-01-24T13:13:30.202Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "天马司空",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/01/24/Spring%E5%92%8CMyBatis/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Spring和MyBatis',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/welcome-image.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">天马司空的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Spring和MyBatis</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">Spring和MyBatis</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-24T13:13:09.000Z" title="发表于 2025-01-24 21:13:09">2025-01-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-01-24T13:13:30.202Z" title="更新于 2025-01-24 21:13:30">2025-01-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><em><strong>学Java哪有不疯的，哈哈</strong></em></p>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h2><p> 控制反转是一种设计思想。就是<strong>将原本在程序中手动创建对象的控制权交由Spring框架来管理</strong>。最直接的体现就是不用去new一个对象了，而是由Spring容器来管理一个叫<strong>bean</strong>的东西，控制它的整个生命周期。Spring通过Java的<strong>反射</strong>机制来实现对其他对象的控制，包括初始化、创建、销毁等，解放手动创建对象的过程，同时降低类之间的耦合度。</p>
+<h3 id="IoC的好处"><a href="#IoC的好处" class="headerlink" title="IoC的好处"></a>IoC的好处</h3><p> 资源不由使用资源者管理，而有不使用资源的第三方管理。</p>
+<ul>
+<li>资源集中管理，实现资源的可配置和易管理</li>
+<li>降低了使用资源双方的依赖程度，也就是耦合度</li>
+</ul>
+<h3 id="DI（依赖注入）"><a href="#DI（依赖注入）" class="headerlink" title="DI（依赖注入）"></a>DI（依赖注入）</h3><p> IOC最常见的实现方式是依赖注入，指的是在Spring创建对象的过程中，把对象依赖的属性注入到对象中。</p>
+<p> 在SpringBoot中可以使用@Autowired注解进行依赖注入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(&quot;test&quot;)</span><br><span class="line">@RestController</span><br><span class="line">public class TestController &#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private Cat cat;</span><br><span class="line">    @RequestMapping(&quot;say&quot;)</span><br><span class="line">    private String login()&#123;</span><br><span class="line">        return cat.sayHello();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 也可以使用set的方式，在xml文件中注入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//（1）创建类，定义属性和对应的 set 方法</span><br><span class="line">public class Book &#123;</span><br><span class="line">	//创建属性</span><br><span class="line">	private String bname;</span><br><span class="line">	private String bauthor;</span><br><span class="line">	//创建属性对应的 set 方法</span><br><span class="line">	public void setBname(String bname) &#123;</span><br><span class="line">		this.bname = bname;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setBauthor(String bauthor) &#123;</span><br><span class="line">		this.bauthor = bauthor;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line">//（2）在 spring 配置文件配置对象创建，配置属性注入</span><br><span class="line">&lt;bean id=&quot;book&quot; class=&quot;com.atguigu.spring5.Book&quot;&gt;</span><br><span class="line">	//使用 property 完成属性注入</span><br><span class="line">	//name：类里面属性名称</span><br><span class="line">	//value：向属性注入的值</span><br><span class="line">	&lt;property name=&quot;bname&quot; value=&quot;西游记&quot;&gt;&lt;/property&gt;</span><br><span class="line">	&lt;property name=&quot;bauthor&quot; value=&quot;吴承恩&quot;&gt;&lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<p> 有参构造也是可以的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">//（1）创建类，定义属性，创建属性对应有参数构造方法</span><br><span class="line">public class Book &#123;</span><br><span class="line">	//属性</span><br><span class="line">	private String bname;</span><br><span class="line">	private String bauthor;</span><br><span class="line">	//有参数构造</span><br><span class="line">	public Orders(String bname,String bauthor) &#123;</span><br><span class="line">		this.bname= bname;</span><br><span class="line">		this.bauthor= bauthor;</span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br><span class="line">//（2）在 spring 配置文件中进行配置</span><br><span class="line">&lt;bean id=&quot;orders&quot; class=&quot;com.atguigu.spring5.Orders&quot;&gt;</span><br><span class="line">	&lt;constructor-arg name=&quot;bname&quot; value=&quot;三国演义&quot;&gt;&lt;/constructor-arg&gt;</span><br><span class="line">	&lt;constructor-arg name=&quot;bauthor&quot; value=&quot;罗贯中&quot;&gt;&lt;/constructor-arg&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h3><p> Bean代指的就是那些被IoC容器所管理的对象。我们需要告诉IoC容器帮助我们管理哪些对象，这个是通过配置元数据来定义的。配置元数据可以是 XML 文件、注解或者 Java 配置类。</p>
+<h4 id="创建Bean的方式"><a href="#创建Bean的方式" class="headerlink" title="创建Bean的方式"></a>创建Bean的方式</h4><ul>
+<li>直接在xml文件中声明一个类为Bean</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Constructor-arg with &#x27;value&#x27; attribute --&gt;</span><br><span class="line">&lt;bean id=&quot;...&quot; class=&quot;...&quot;&gt;</span><br><span class="line">   &lt;constructor-arg value=&quot;...&quot;/&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用@Component,@Service,@Controller,@Repository注解<ul>
+<li><strong>@Component</strong> : 侧重于通用的Bean类</li>
+<li><strong>@Service</strong>：标识该类用于业务逻辑</li>
+<li><strong>@Controller</strong>：标识该类为Spring MVC的控制器类</li>
+<li><strong>@Repository</strong>: 对应持久即Dao层，只有属性和Setter,Getter</li>
+</ul>
+</li>
+<li>使用@Bean注解,这种方式用在Spring Boot 应用中</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//@Configuration 标识这是一个Spring Boot 配置类</span><br><span class="line">//其将会扫描该类中是否存在@Bean 注解的方法</span><br><span class="line">//比如如下代码，将会创建User对象并放入容器中。</span><br><span class="line">@Configuration</span><br><span class="line">public class UserConfiguration&#123;</span><br><span class="line">     </span><br><span class="line">      @Bean　　　 </span><br><span class="line">      @ConditionalOnBean(Location.class)</span><br><span class="line">      public User user()&#123;</span><br><span class="line">           return new User();</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用注解@Import,也会创建对象并注入容器中</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Import(User.class)</span><br><span class="line">public class MicroblogUserWebApplication &#123;</span><br><span class="line">    public static void main(String args[]) &#123;</span><br><span class="line">        SpringApplication.run(MicroblogUserWebApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Component-和-Bean-的区别是什么？"><a href="#Component-和-Bean-的区别是什么？" class="headerlink" title="@Component 和 @Bean 的区别是什么？"></a>@Component 和 @Bean 的区别是什么？</h4><ul>
+<li>@Component注解作用于类，@Bean注解作用于方法</li>
+<li>@Component通常是通过类路径扫描来自动侦测以及自动装配到Spring容器中。@Bean注解通常是在标有该注解的方法中定义产生这个bean，告诉Spring这是某个类的实例。</li>
+<li>@bean注解比@Component注解的自定义性更强，比如引用第三方库中的类时只能用@Bean</li>
+</ul>
+<h4 id="注入Bean的注解有哪些？"><a href="#注入Bean的注解有哪些？" class="headerlink" title="注入Bean的注解有哪些？"></a>注入Bean的注解有哪些？</h4><p>@Autowired @Resource @Inject</p>
+<h4 id="Autowired和-Resource的区别是什么"><a href="#Autowired和-Resource的区别是什么" class="headerlink" title="@Autowired和@Resource的区别是什么"></a>@Autowired和@Resource的区别是什么</h4><ul>
+<li>Autowired属于<strong>Spring内置</strong>的注解，默认的注入方式为<strong>byType</strong>，也就是<strong>按类型匹配</strong>，优先根据接口类型去匹配并注入Bean。但如果出现某个类型下有好几个实现类的情况的话就会出错，这种情况下就要再加个@Qualifier注解来显式指定名称。</li>
+<li>Resource属于<strong>JDK提供</strong>的注解，默认注入方式为byName，有两个比较重要的属性:name(名称)，type(类型)。可以通过name属性来显示指定名称。</li>
+</ul>
+<h4 id="Bean的作用域有哪些？"><a href="#Bean的作用域有哪些？" class="headerlink" title="Bean的作用域有哪些？"></a>Bean的作用域有哪些？</h4><p> 通过加个@scope注解来配置bean的作用域</p>
+<ul>
+<li><strong>singleton</strong>：容器中只有唯一的bean实例。默认都是单例的。</li>
+<li><strong>prototype</strong>：每次获取都会创建一个新的 bean 实例。</li>
+<li><strong>request</strong> ：每次HTTP请求都会产生一个新的bean，该bean仅在当前的HTTP request中有效。</li>
+<li><strong>session</strong>：每次来自新的session的HTTP请求都会产生一个新的bean，该bean仅在当前的HTTP session内有效。</li>
+<li><strong>application&#x2F;global-session</strong>：每个Web应用在启动时创建一个Bean，该Bean仅在当前应用启动时间内有效。</li>
+<li><strong>websocket</strong>：每一次websocket会话产生一个新的bean。</li>
+</ul>
+<h4 id="单例-Bean-的线程安全问题了解吗？"><a href="#单例-Bean-的线程安全问题了解吗？" class="headerlink" title="单例 Bean 的线程安全问题了解吗？"></a>单例 Bean 的线程安全问题了解吗？</h4><p> 单例Bean存在线程问题，主要是因为当多个线程操作同一个对象的时候是存在资源竞争的。</p>
+<p> 解决方法：</p>
+<ol>
+<li>在Bean中尽量避免定义可变的成员变量。</li>
+<li>在类中定义ThreadLocal成员变量，将需要的可变成员变量保存在ThreadLocal中。</li>
+</ol>
+<p> 但一般的Bean实际上都是无状态的，如Dao，Service，所以大部分情况下Bean是线程安全的。</p>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p> 将那些与具体业务实现无关，却被业务共同调用的部分封装起来，减少系统的重复代码，是开闭原则的体现。比如在一些业务中需要在执行之前验证用户权限，验证权限的实现逻辑其实是一样的，就可以把他们抽象成一个切面，然后由Spring统一注入到业务代码中。</p>
+<h3 id="AOP有哪些实现方式？"><a href="#AOP有哪些实现方式？" class="headerlink" title="AOP有哪些实现方式？"></a>AOP有哪些实现方式？</h3><h4 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h4><p> 基于XML配置的Spring AOP，采用声明的方式实现，在XML文件中配置，大致步骤为：配置文件中配置pointcut，在java中编写实际的aspect类，针对切入点进行相关的业务处理。</p>
+<p> 通俗来说就是在类中写好方法，然后在xml里配置切点，切面和通知等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> &lt;aop:config&gt;</span><br><span class="line">  &lt;aop:aspect ref=&quot;aspectBean&quot;&gt;</span><br><span class="line">     &lt;aop:pointcut id=&quot;pointcut&quot; expression=&quot;execution(* com.spring.service.impl.UserManagerServiceImpl..*(..))&quot;/&gt;</span><br><span class="line">     </span><br><span class="line">     &lt;aop:before method=&quot;doBefore&quot; pointcut-ref=&quot;pointcut&quot;/&gt; </span><br><span class="line">     &lt;aop:after-returning method=&quot;doAfterReturning&quot; pointcut-ref=&quot;pointcut&quot; returning=&quot;result&quot;/&gt;</span><br><span class="line">     &lt;aop:after method=&quot;doAfter&quot; pointcut-ref=&quot;pointcut&quot; /&gt; </span><br><span class="line">     &lt;aop:around method=&quot;doAround&quot; pointcut-ref=&quot;pointcut&quot;/&gt; </span><br><span class="line">     &lt;aop:after-throwing method=&quot;doAfterThrowing&quot; pointcut-ref=&quot;pointcut&quot; throwing=&quot;ex&quot;/&gt;</span><br><span class="line">   &lt;/aop:aspect&gt;</span><br><span class="line">&lt;/aop:config&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h4><p> 主要就是使用使用aspectJ的注解来进行创建，通过加上**@Aspect<strong>注解表明这是个切面，在默认构造函数上加上</strong>@PointCut<strong>表明切入点表达式，然后在那些通知方法上加上</strong>@Before**,<strong>@Around</strong>这种注解声明在什么时候使用这个通知。</p>
+<p> 这种方式也要在xml文件中<strong>声明spring对@AspectJ的支持</strong>并<strong>声明通知类</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">package com.spring.aop;</span><br><span class="line"></span><br><span class="line">import org.aspectj.lang.JoinPoint;</span><br><span class="line">import org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line">import org.aspectj.lang.annotation.After;</span><br><span class="line">import org.aspectj.lang.annotation.AfterReturning;</span><br><span class="line">import org.aspectj.lang.annotation.AfterThrowing;</span><br><span class="line">import org.aspectj.lang.annotation.Around;</span><br><span class="line">import org.aspectj.lang.annotation.Aspect;</span><br><span class="line">import org.aspectj.lang.annotation.Before;</span><br><span class="line"></span><br><span class="line">@Aspect</span><br><span class="line">public class AopAspectJ &#123;</span><br><span class="line">    </span><br><span class="line">    /**  </span><br><span class="line">     * 必须为final String类型的,注解里要使用的变量只能是静态常量类型的  </span><br><span class="line">     */  </span><br><span class="line">    public static final String EDP=&quot;execution(* com.spring.service.impl.UserManagerServiceImpl..*(..))&quot;;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 切面的前置方法 即方法执行前拦截到的方法</span><br><span class="line">      * 在目标方法执行之前的通知</span><br><span class="line">      * @param jp</span><br><span class="line">     */</span><br><span class="line">    @Before(EDP)</span><br><span class="line">    public void doBefore(JoinPoint jp)&#123;</span><br><span class="line">        </span><br><span class="line">        System.out.println(&quot;=========执行前置通知==========&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 在方法正常执行通过之后执行的通知叫做返回通知</span><br><span class="line">      * 可以返回到方法的返回值 在注解后加入returning </span><br><span class="line">     * @param jp</span><br><span class="line">     * @param result</span><br><span class="line">     */</span><br><span class="line">    @AfterReturning(value=EDP,returning=&quot;result&quot;)</span><br><span class="line">    public void doAfterReturning(JoinPoint jp,String result)&#123;</span><br><span class="line">        System.out.println(&quot;===========执行后置通知============&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 最终通知：目标方法调用之后执行的通知（无论目标方法是否出现异常均执行）</span><br><span class="line">      * @param jp</span><br><span class="line">     */</span><br><span class="line">    @After(value=EDP)</span><br><span class="line">    public void doAfter(JoinPoint jp)&#123;</span><br><span class="line">        System.out.println(&quot;===========执行最终通知============&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 环绕通知：目标方法调用前后执行的通知，可以在方法调用前后完成自定义的行为。</span><br><span class="line">      * @param pjp</span><br><span class="line">     * @return</span><br><span class="line">     * @throws Throwable</span><br><span class="line">     */</span><br><span class="line">    @Around(EDP)</span><br><span class="line">    public Object doAround(ProceedingJoinPoint pjp) throws Throwable&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;======执行环绕通知开始=========&quot;);</span><br><span class="line">        // 调用方法的参数</span><br><span class="line">        Object[] args = pjp.getArgs();</span><br><span class="line">        // 调用的方法名</span><br><span class="line">        String method = pjp.getSignature().getName();</span><br><span class="line">        // 获取目标对象</span><br><span class="line">        Object target = pjp.getTarget();</span><br><span class="line">        // 执行完方法的返回值</span><br><span class="line">        // 调用proceed()方法，就会触发切入点方法执行</span><br><span class="line">        Object result=pjp.proceed();</span><br><span class="line">        System.out.println(&quot;输出,方法名：&quot; + method + &quot;;目标对象：&quot; + target + &quot;;返回值：&quot; + result);</span><br><span class="line">        System.out.println(&quot;======执行环绕通知结束=========&quot;);</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /**</span><br><span class="line">     * 在目标方法非正常执行完成, 抛出异常的时候会走此方法</span><br><span class="line">      * @param jp</span><br><span class="line">     * @param ex</span><br><span class="line">     */</span><br><span class="line">    @AfterThrowing(value=EDP,throwing=&quot;ex&quot;)</span><br><span class="line">    public void doAfterThrowing(JoinPoint jp,Exception ex) &#123;</span><br><span class="line">        System.out.println(&quot;===========执行异常通知============&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="AspectJ-定义的通知类型有哪些？"><a href="#AspectJ-定义的通知类型有哪些？" class="headerlink" title="AspectJ 定义的通知类型有哪些？"></a>AspectJ 定义的通知类型有哪些？</h3><ul>
+<li>before:目标对象的方法调用之前触发</li>
+<li>after:目标对象的方法调用之后触发</li>
+<li>afterReturning:目标对象的方法调用完成，在返回结果值之后触发</li>
+<li>afterThrowing:目标对象抛出异常后触发</li>
+<li>around：可以任意的在目标对象的方法调用前后触发</li>
+</ul>
+<h3 id="Spring-AOP的实现原理"><a href="#Spring-AOP的实现原理" class="headerlink" title="Spring AOP的实现原理"></a>Spring AOP的实现原理</h3><p> 通过<strong>动态代理</strong>实现。如果我们为Spring的某个bean配置了切面，那么Spring在创建这个bean的时候，实际上创建的是这个bean的一个<strong>代理对象</strong>，后续对bean中方法的调用，实际上<strong>调用的是代理类重写的代理方法</strong>，AOP使用了两种动态代理，分别是<strong>JDK的动态代理</strong>和<strong>CGLib的动态代理</strong>。</p>
+<h3 id="JDK动态代理和CGLIB动态代理的区别？"><a href="#JDK动态代理和CGLIB动态代理的区别？" class="headerlink" title="JDK动态代理和CGLIB动态代理的区别？"></a>JDK动态代理和CGLIB动态代理的区别？</h3><ol>
+<li>JDK动态代理使用jdk中的类Proxy来创建代理对象，使用反射技术来实现，不需要导入其他的依赖。CGLIB需要导入相关依赖，使用字节码增强技术来实现。</li>
+<li>当目标类实现了接口的时候，默认使用JDK动态代理方式来增强方法，没有实现接口的时候使用CGLIB动态代理方法来增强方法。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">天马司空</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/01/24/Spring%E5%92%8CMyBatis/">http://example.com/2025/01/24/Spring%E5%92%8CMyBatis/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">天马司空的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.gif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">天马司空</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tianmasikong"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring"><span class="toc-number">1.</span> <span class="toc-text">Spring</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IoC"><span class="toc-number">1.1.</span> <span class="toc-text">IoC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IoC%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="toc-number">1.1.1.</span> <span class="toc-text">IoC的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DI%EF%BC%88%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">DI（依赖注入）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bean"><span class="toc-number">1.1.3.</span> <span class="toc-text">Bean</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BABean%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">创建Bean的方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Component-%E5%92%8C-Bean-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">@Component 和 @Bean 的区别是什么？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E5%85%A5Bean%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.3.3.</span> <span class="toc-text">注入Bean的注解有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Autowired%E5%92%8C-Resource%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.1.3.4.</span> <span class="toc-text">@Autowired和@Resource的区别是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.1.3.5.</span> <span class="toc-text">Bean的作用域有哪些？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B-Bean-%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98%E4%BA%86%E8%A7%A3%E5%90%97%EF%BC%9F"><span class="toc-number">1.1.3.6.</span> <span class="toc-text">单例 Bean 的线程安全问题了解吗？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP"><span class="toc-number">1.2.</span> <span class="toc-text">AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AOP%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="toc-number">1.2.1.</span> <span class="toc-text">AOP有哪些实现方式？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">静态代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">动态代理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AspectJ-%E5%AE%9A%E4%B9%89%E7%9A%84%E9%80%9A%E7%9F%A5%E7%B1%BB%E5%9E%8B%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">AspectJ 定义的通知类型有哪些？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring-AOP%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.3.</span> <span class="toc-text">Spring AOP的实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E5%92%8CCGLIB%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-number">1.2.4.</span> <span class="toc-text">JDK动态代理和CGLIB动态代理的区别？</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">设计模式</a><time datetime="2025-01-24T13:15:24.000Z" title="发表于 2025-01-24 21:15:24">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E9%83%A8%E5%88%86%E5%85%AB%E8%82%A1%E8%A1%A5%E5%85%85/" title="部分八股补充">部分八股补充</a><time datetime="2025-01-24T13:14:35.000Z" title="发表于 2025-01-24 21:14:35">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E6%95%B4%E7%90%86/" title="项目介绍整理">项目介绍整理</a><time datetime="2025-01-24T13:13:51.000Z" title="发表于 2025-01-24 21:13:51">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/Spring%E5%92%8CMyBatis/" title="Spring和MyBatis">Spring和MyBatis</a><time datetime="2025-01-24T13:13:09.000Z" title="发表于 2025-01-24 21:13:09">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/Redis%E7%9F%A5%E8%AF%86%E7%82%B9%E5%8F%8A%E8%80%83%E7%82%B9%E6%95%B4%E7%90%86/" title="Redis知识点及考点整理">Redis知识点及考点整理</a><time datetime="2025-01-24T13:12:31.000Z" title="发表于 2025-01-24 21:12:31">2025-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 天马司空</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
