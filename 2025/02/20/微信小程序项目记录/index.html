@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>微信小程序项目记录 | 天马司空的博客</title><meta name="author" content="天马司空"><meta name="copyright" content="天马司空"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="微信小程序项目记录模块拆解platform-admin后台模块，也是系统的核心，用来开发后台管理系统。 前端由Vue编写，后端Spring Boot 使用自定义注解+Aop的方式封装日志管理、Redis管理逻辑 自定义注解： 12345678&#x2F;&#x2F;注解用于方法@Target(ElementType.METHOD)&#x2F;&#x2F;运行时使用@Retention(RetentionPolicy.RUNTIME)@D">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序项目记录">
+<meta property="og:url" content="http://example.com/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="天马司空的博客">
+<meta property="og:description" content="微信小程序项目记录模块拆解platform-admin后台模块，也是系统的核心，用来开发后台管理系统。 前端由Vue编写，后端Spring Boot 使用自定义注解+Aop的方式封装日志管理、Redis管理逻辑 自定义注解： 12345678&#x2F;&#x2F;注解用于方法@Target(ElementType.METHOD)&#x2F;&#x2F;运行时使用@Retention(RetentionPolicy.RUNTIME)@D">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/head.gif">
+<meta property="article:published_time" content="2025-02-20T06:20:55.000Z">
+<meta property="article:modified_time" content="2025-02-20T06:24:04.471Z">
+<meta property="article:author" content="天马司空">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/head.gif"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "微信小程序项目记录",
+  "url": "http://example.com/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/",
+  "image": "http://example.com/img/head.gif",
+  "datePublished": "2025-02-20T06:20:55.000Z",
+  "dateModified": "2025-02-20T06:24:04.471Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "天马司空",
+      "url": "http://example.com/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '微信小程序项目记录',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/welcome-image.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">天马司空的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">微信小程序项目记录</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">微信小程序项目记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-02-20T06:20:55.000Z" title="发表于 2025-02-20 14:20:55">2025-02-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-02-20T06:24:04.471Z" title="更新于 2025-02-20 14:24:04">2025-02-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D/">项目介绍</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="微信小程序项目记录"><a href="#微信小程序项目记录" class="headerlink" title="微信小程序项目记录"></a>微信小程序项目记录</h1><h2 id="模块拆解"><a href="#模块拆解" class="headerlink" title="模块拆解"></a>模块拆解</h2><h3 id="platform-admin"><a href="#platform-admin" class="headerlink" title="platform-admin"></a>platform-admin</h3><p>后台模块，也是系统的核心，用来开发后台管理系统。</p>
+<p>前端由Vue编写，后端Spring Boot</p>
+<p>使用自定义注解+Aop的方式封装日志管理、Redis管理逻辑</p>
+<p>自定义注解：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注解用于方法</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="comment">//运行时使用</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SysLog &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;操作日志&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 加上该注解，代理service命中缓存则从缓存中读取数据，否则从service业务逻辑获得，并存入缓存</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RedisCache &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 缓存key</span></span><br><span class="line"><span class="comment">     * 若destine为true，存入redis的键为cacheKey的值</span></span><br><span class="line"><span class="comment">     * 若destine为false，存入redis的的键为service方法的 cacheKey:userId_id_packageName.className.methodName</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    String <span class="title function_">cacheKey</span><span class="params">()</span> <span class="keyword">default</span> Constant.SYS_CACHE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否使用指定的key</span></span><br><span class="line"><span class="comment">     * 若为true，存入redis的键为cacheKey的值</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">destine</span><span class="params">()</span> <span class="keyword">default</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@Target(ElementType.METHOD)</p>
+<ul>
+<li><strong>作用</strong>：指定注解的适用范围</li>
+<li><strong>取值解析</strong>：<ul>
+<li><code>ElementType.METHOD</code>：表示该注解只能标注在方法上</li>
+<li>其他常用取值：TYPE（类）、FIELD（字段）、PARAMETER（参数）等</li>
+</ul>
+</li>
+</ul>
+<p>@Retention(RetentionPolicy.RUNTIME)</p>
+<ul>
+<li><strong>作用</strong>：控制注解的生命周期</li>
+<li><strong>策略对比</strong>：<ul>
+<li><code>SOURCE</code>：仅存在于源码阶段（编译器使用）</li>
+<li><code>CLASS</code>：保留到class文件（默认值）</li>
+<li><code>RUNTIME</code>：运行时可通过反射获取（最常用）</li>
+</ul>
+</li>
+</ul>
+<p>@Documented</p>
+<ul>
+<li><strong>作用</strong>：标注的注解会包含在Javadoc生成的文档中</li>
+</ul>
+<h4 id="日志处理切面类"><a href="#日志处理切面类" class="headerlink" title="日志处理切面类"></a>日志处理切面类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SysLogAspect</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SysLogService sysLogService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 切点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.platform.annotation.SysLog)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">logPointCut</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 前置通知</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> joinPoint 连接点</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Before(&quot;logPointCut()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveSysLog</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        <span class="type">MethodSignature</span> <span class="variable">signature</span> <span class="operator">=</span> (MethodSignature) joinPoint.getSignature();</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> signature.getMethod();</span><br><span class="line"></span><br><span class="line">        <span class="type">SysLogEntity</span> <span class="variable">sysLog</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SysLogEntity</span>();</span><br><span class="line">        <span class="comment">//通过反射获取方法上的注解</span></span><br><span class="line">        <span class="type">SysLog</span> <span class="variable">syslog</span> <span class="operator">=</span> method.getAnnotation(SysLog.class);</span><br><span class="line">        <span class="keyword">if</span> (syslog != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">//注解上的描述</span></span><br><span class="line">            sysLog.setOperation(syslog.value());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//请求的方法名</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> joinPoint.getTarget().getClass().getName();</span><br><span class="line">        <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> signature.getName();</span><br><span class="line">        sysLog.setMethod(className + <span class="string">&quot;.&quot;</span> + methodName + <span class="string">&quot;()&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//请求的参数</span></span><br><span class="line">        <span class="comment">//通过反射获取方法参数</span></span><br><span class="line">        Object[] args = joinPoint.getArgs();</span><br><span class="line">        <span class="type">String</span> <span class="variable">params</span> <span class="operator">=</span> JSON.toJSONString(args[<span class="number">0</span>]);</span><br><span class="line">        sysLog.setParams(params);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取request</span></span><br><span class="line">        <span class="type">HttpServletRequest</span> <span class="variable">request</span> <span class="operator">=</span> HttpContextUtils.getHttpServletRequest();</span><br><span class="line">        <span class="comment">//设置IP地址</span></span><br><span class="line">        sysLog.setIp(IPUtils.getIpAddr(request));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//用户名</span></span><br><span class="line">        <span class="type">SysUserEntity</span> <span class="variable">sysUserEntity</span> <span class="operator">=</span> ShiroUtils.getUserEntity();</span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;login&quot;</span>.equals(methodName)) &#123;</span><br><span class="line">            username = params;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != sysUserEntity) &#123;</span><br><span class="line">            username = ShiroUtils.getUserEntity().getUsername();</span><br><span class="line">        &#125;</span><br><span class="line">        sysLog.setUsername(username);</span><br><span class="line"></span><br><span class="line">        sysLog.setCreateDate(<span class="keyword">new</span> <span class="title class_">Date</span>());</span><br><span class="line">        <span class="comment">//保存系统日志</span></span><br><span class="line">        sysLogService.save(sysLog);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>**<code>@Before</code>**：在目标方法执行前执行。</li>
+<li>**<code>JoinPoint</code>**：封装了目标方法的信息（如方法签名、参数等）。</li>
+<li>**<code>MethodSignature</code>**：获取方法签名，进一步获取方法名和参数。</li>
+<li><strong><code>@SysLog</code> 注解</strong>：通过反射获取注解信息，提取操作描述。</li>
+<li><strong>日志信息</strong>：<ul>
+<li>注解上的描述：通过反射获取注解及注解里的value值，例如修改密码</li>
+<li>方法名：<code>className + &quot;.&quot; + methodName + &quot;()&quot;</code></li>
+<li>请求参数：将第一个参数序列化为 JSON 字符串。</li>
+<li>IP 地址：通过 <code>HttpServletRequest</code> 获取客户端 IP。</li>
+<li>用户名：通过 Shiro 工具类获取当前登录用户。</li>
+<li>创建时间：当前时间。</li>
+</ul>
+</li>
+</ul>
+<h4 id="Redis切面类"><a href="#Redis切面类" class="headerlink" title="Redis切面类"></a>Redis切面类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisCacheAspect</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(com.platform.annotation.RedisCache)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">webAspect</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;unchecked&quot;)</span></span><br><span class="line">    <span class="meta">@Around(&quot;webAspect()&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">redisCache</span><span class="params">(ProceedingJoinPoint pjp)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="comment">//得到类名、方法名和参数</span></span><br><span class="line">        String redisResult;</span><br><span class="line">        <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> pjp.getTarget().getClass().getName();</span><br><span class="line">        <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> pjp.getSignature().getName();</span><br><span class="line">        Object[] args = pjp.getArgs();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//得到被代理的方法</span></span><br><span class="line">        <span class="type">Signature</span> <span class="variable">signature</span> <span class="operator">=</span> pjp.getSignature();</span><br><span class="line">        <span class="keyword">if</span> (!(signature <span class="keyword">instanceof</span> MethodSignature)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">MethodSignature</span> <span class="variable">methodSignature</span> <span class="operator">=</span> (MethodSignature) signature;</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> pjp.getTarget().getClass().getMethod(methodSignature.getName(), methodSignature.getParameterTypes());</span><br><span class="line">        <span class="comment">//得到被代理的方法上的注解</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">cacheKey</span> <span class="operator">=</span> method.getAnnotation(RedisCache.class).cacheKey();</span><br><span class="line">        <span class="type">boolean</span> <span class="variable">destine</span> <span class="operator">=</span> method.getAnnotation(RedisCache.class).destine();</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> cacheKey;</span><br><span class="line">        <span class="keyword">if</span> (!destine) &#123;</span><br><span class="line">            <span class="comment">//根据类名，方法名和参数生成key</span></span><br><span class="line">            key = StringUtils.genKey(cacheKey, className, methodName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (!J2CacheUtils.exists(key)) &#123;</span><br><span class="line">            <span class="comment">//缓存不存在，则调用原方法，并将结果放入缓存中</span></span><br><span class="line">            result = pjp.proceed(args);</span><br><span class="line">            redisResult = JSON.toJSONString(result);</span><br><span class="line">            J2CacheUtils.put(key, redisResult);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//缓存命中</span></span><br><span class="line">            redisResult = JSONObject.toJSON(J2CacheUtils.get(key)).toString();</span><br><span class="line">            <span class="comment">//得到被代理方法的返回值类型</span></span><br><span class="line">            <span class="type">Class</span> <span class="variable">returnType</span> <span class="operator">=</span> method.getReturnType();</span><br><span class="line">            result = JSON.parseObject(redisResult, returnType);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><strong>作用</strong>：通过 AOP 拦截带有 <code>@RedisCache</code> 注解的方法，实现缓存逻辑。</p>
+</li>
+<li><p><strong>流程</strong>：</p>
+<ol>
+<li>定义切点（<code>@Pointcut</code>）拦截带有 <code>@RedisCache</code> 注解的方法。</li>
+<li>在方法执行前后（<code>@Around</code>）检查缓存是否存在：<ul>
+<li>如果缓存存在，直接返回缓存数据。</li>
+<li>如果缓存不存在，调用目标方法，并将结果存入缓存。</li>
+</ul>
+</li>
+<li>支持自定义缓存键（<code>cacheKey</code>）和是否固定键（<code>destine</code>）。</li>
+</ol>
+<ul>
+<li>**<code>@Around</code>**：在目标方法执行前后执行，可以控制目标方法的执行。</li>
+<li>**<code>ProceedingJoinPoint</code>**：封装了目标方法的信息（如方法签名、参数等）。</li>
+<li>**<code>MethodSignature</code>**：获取方法签名，进一步获取方法名和参数类型。</li>
+<li><strong><code>@RedisCache</code> 注解</strong>：通过反射获取注解信息，提取缓存键和是否固定键。</li>
+<li><strong>缓存键生成</strong>：<ul>
+<li>如果 <code>destine</code> 为 <code>true</code>，直接使用 <code>cacheKey</code> 作为缓存键。</li>
+<li>如果 <code>destine</code> 为 <code>false</code>，根据类名、方法名和参数生成缓存键。</li>
+</ul>
+</li>
+<li><strong>缓存逻辑</strong>：<ul>
+<li>如果缓存不存在，调用目标方法并将结果存入缓存。</li>
+<li>如果缓存存在，从缓存中获取数据并反序列化为目标方法的返回类型。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用J2Cache ，J2Cache 默认使用 <a href="https://gitee.com/link?target=https://www.oschina.net/p/ben-manes-caffeine">Caffeine</a> 作为一级缓存，使用 Redis 作为二级缓存</p>
+<ul>
+<li>default&#x3D;1000, 60m,定义缓存名 default ，对象大小 1000，缓存数据有效时间 60 分钟</li>
+<li>sysCache&#x3D;1000, 60m,定义缓存名 sysCache，对象大小 1000，缓存数据有效时间 60 分钟</li>
+<li>shopCache&#x3D;1000, 60m,定义缓存名 shopCache，对象大小 1000，缓存数据有效时间 60 分钟</li>
+<li>使用 <code>J2Cache</code> 的主要原因是通过本地缓存提升性能，分布式缓存保证数据一致性,在电商系统的商品详情页、秒杀活动等，需要快速响应用户请求的高并发场景下本地缓存可以显著减少对数据库和分布式缓存的压力。订单系统、库存系统等，需要保证缓存和数据库的数据一致性，在 <strong>数据一致性要求高的场景</strong>，J2Cache 的消息通知机制可以及时更新本地缓存。</li>
+</ul>
+</li>
+</ul>
+<h4 id="controller层"><a href="#controller层" class="headerlink" title="controller层"></a>controller层</h4><p>使用Shiro进行权限管理</p>
+<ul>
+<li><strong>传统 RBAC 三表</strong>：用户表（<code>sys_user</code>）、角色表（<code>sys_role</code>）、用户-角色关联表（<code>sys_user_role</code>）。</li>
+<li><strong>扩展权限表</strong>：<code>sys_menu</code> 表本身承担了权限定义功能，通过 <code>sys_role_menu</code> 表实现角色-权限关联。</li>
+<li><strong>命名规范</strong>：<code>模块:操作</code>（如 <code>user:delete</code>），与代码中 <code>@RequiresPermissions</code> 注解匹配。</li>
+<li><strong>动态解析</strong>：通过 <code>sys_menu.perms</code> 字段存储多个权限，逗号分隔。</li>
+</ul>
+<p>在用户登录后，通过Shiro获取用户id，根据用户id递归查询用户可以查看的页面列表并返回给前端显示。</p>
+<p>同时在各个后端接口上加上@RequiresPermissions注解防止越权访问。</p>
+<p>使用一个PageUtil来进行后端分页。</p>
+<h4 id="具体流程：角色管理"><a href="#具体流程：角色管理" class="headerlink" title="具体流程：角色管理"></a>具体流程：角色管理</h4><p>当创建新的角色时，在 <code>sys_role</code> 表中插入角色信息，并在 <code>sys_role_menu</code> 表中插入角色与菜单权限的关联。创建用户时分配角色，在 <code>sys_user_role</code> 表中插入用户与角色的关联。</p>
+<ul>
+<li>用户登录后，系统加载用户的角色和权限信息。在业务逻辑前使用 <code>@RequiresPermissions</code> 注解校验用户权限。如果用户无权限，抛出 <code>UnauthorizedException</code> 并返回 403 状态码，<strong>防止越权访问</strong>。</li>
+<li>用户登录后，查询角色权限并将角色权限缓存到  J2Cache 中，<strong>优化权限验证的性能</strong>。</li>
+<li>当用户访问前端界面时，查询菜单树并将菜单树缓存到 J2Cache中，<strong>减少数据库查询</strong>。</li>
+<li>当角色权限变更时，先对MySQL数据库中的相关字段进行修改，然后在缓存中清除该角色的权限信息和菜单树信息。保证<strong>权限变更的实时生效</strong></li>
+</ul>
+<h4 id="为什么使用shiro"><a href="#为什么使用shiro" class="headerlink" title="为什么使用shiro"></a>为什么使用shiro</h4><ul>
+<li>shiro可以通过在方法上加 <code>@RequiresPermissions</code>注解的方式来细分权限管理的粒度</li>
+<li>shiro是有状态的，更加安全，可以更好的应对用户退出登录、修改密码、修改用户角色等场景</li>
+</ul>
+<h4 id="介绍一下shiro的原理"><a href="#介绍一下shiro的原理" class="headerlink" title="介绍一下shiro的原理"></a>介绍一下shiro的原理</h4><h5 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h5><ul>
+<li>使用username和password组装UsernamePasswordToken，调用login方法</li>
+<li>login方法会首先使用token去shiro缓存中查询登录的缓存信息，如果没有命中就调用我们自己编写的Realm类中重写的doGetAuthenticationInfo方法</li>
+<li>根据token中的用户名和密码去数据库中查询用户，如果命中则将用户放入session中，设为当前用户</li>
+<li>查询用户的权限信息，放入J2Cache中</li>
+</ul>
+<h5 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h5><ul>
+<li>根据用户id查询用户权限信息，如果缓存命中则直接返回，未命中就去数据库中获取</li>
+<li>对比用户是否拥有该权限</li>
+</ul>
+<h4 id="J2Cache的原理"><a href="#J2Cache的原理" class="headerlink" title="J2Cache的原理"></a>J2Cache的原理</h4><p>首次调用 getList 接口时，无法从缓存中获取数据，然后从“数据库”中获取数据库，先是存储到了二级缓存 Redis 中。</p>
+<p>第二次调用 getList 接口时，是从二级缓存 Redis 中获取的数据，同时底层会把数据存储到一级缓存 Caffeine 中。</p>
+<p>后续调用 getList 接口时，都是直接从一级缓存 Caffeine 中获取数据。</p>
+<p>对数据更新后，需要删除缓存中的脏数据，先删除二级缓存，再删除一级缓存</p>
+<h4 id="加密算法"><a href="#加密算法" class="headerlink" title="加密算法"></a>加密算法</h4><p>使用sha256哈希算法，哈希算法无法还原</p>
+<ul>
+<li>sha256算法的哈希值长度为256位，提高了暴力破解的难度</li>
+<li>将密码通过sha256计算出哈希值后与数据库中存储的密码进行比对</li>
+</ul>
+<h4 id="可以改进的点"><a href="#可以改进的点" class="headerlink" title="可以改进的点"></a>可以改进的点</h4><ul>
+<li>密码在前端到后端的通信过程中进行加密，可以使用RSA非对称加密，登录前先向服务器发送预热请求，服务器生成完公钥后发送给前端，前端使用公钥加密后再进行传输</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">天马司空</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/">http://example.com/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">天马司空的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.gif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">天马司空</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tianmasikong"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">微信小程序项目记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E6%8B%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">模块拆解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#platform-admin"><span class="toc-number">1.1.1.</span> <span class="toc-text">platform-admin</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86%E5%88%87%E9%9D%A2%E7%B1%BB"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">日志处理切面类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Redis%E5%88%87%E9%9D%A2%E7%B1%BB"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">Redis切面类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#controller%E5%B1%82"><span class="toc-number">1.1.1.3.</span> <span class="toc-text">controller层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E6%B5%81%E7%A8%8B%EF%BC%9A%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86"><span class="toc-number">1.1.1.4.</span> <span class="toc-text">具体流程：角色管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8shiro"><span class="toc-number">1.1.1.5.</span> <span class="toc-text">为什么使用shiro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8Bshiro%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.6.</span> <span class="toc-text">介绍一下shiro的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%A4%E8%AF%81"><span class="toc-number">1.1.1.6.1.</span> <span class="toc-text">认证</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%88%E6%9D%83"><span class="toc-number">1.1.1.6.2.</span> <span class="toc-text">授权</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#J2Cache%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.7.</span> <span class="toc-text">J2Cache的原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95"><span class="toc-number">1.1.1.8.</span> <span class="toc-text">加密算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E4%BB%A5%E6%94%B9%E8%BF%9B%E7%9A%84%E7%82%B9"><span class="toc-number">1.1.1.9.</span> <span class="toc-text">可以改进的点</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/02/20/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/" title="微信小程序项目记录">微信小程序项目记录</a><time datetime="2025-02-20T06:20:55.000Z" title="发表于 2025-02-20 14:20:55">2025-02-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="设计模式">设计模式</a><time datetime="2025-01-24T13:15:24.000Z" title="发表于 2025-01-24 21:15:24">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E9%83%A8%E5%88%86%E5%85%AB%E8%82%A1%E8%A1%A5%E5%85%85/" title="部分八股补充">部分八股补充</a><time datetime="2025-01-24T13:14:35.000Z" title="发表于 2025-01-24 21:14:35">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D%E6%95%B4%E7%90%86/" title="项目介绍整理">项目介绍整理</a><time datetime="2025-01-24T13:13:51.000Z" title="发表于 2025-01-24 21:13:51">2025-01-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/24/Spring%E5%92%8CMyBatis/" title="Spring和MyBatis">Spring和MyBatis</a><time datetime="2025-01-24T13:13:09.000Z" title="发表于 2025-01-24 21:13:09">2025-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By 天马司空</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
